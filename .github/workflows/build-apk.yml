@@ -59,10 +59,16 @@ jobs:
 
       - name: 🔨 Build Release APK
         run: |
+          set -o pipefail
           cd android
-          ./gradlew assembleRelease --no-daemon --stacktrace 2>&1 | tail -100
+          ./gradlew assembleRelease --no-daemon 2>&1 | tee /tmp/gradle.log
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4096m"
+
+      - name: 📋 List APK Output
+        run: |
+          echo "=== Searching for APK files ==="
+          find . -name "*.apk" 2>/dev/null || echo "No APK files found"
 
       - name: 📋 Get Version
         id: version
