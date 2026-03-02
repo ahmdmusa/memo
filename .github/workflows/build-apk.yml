@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build-android:
-    name: Build Android APK
+    name: Build Android APK (EAS Local)
     runs-on: ubuntu-latest
 
     steps:
@@ -39,36 +39,18 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
-      - name: 🛠️ Prebuild Android
-        run: npx expo prebuild --platform android --clean
+      - name: 🔧 Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: 🔑 Setup Expo Token
+        run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
+
+      - name: 🛠️ Build APK with EAS Local
+        run: |
+          eas build --platform android --profile preview --local --non-interactive --output ./memo-release.apk
         env:
-          EXPO_NO_TELEMETRY: 1
-
-      - name: 🔑 Make Gradlew Executable
-        run: chmod +x android/gradlew
-
-      - name: 🔍 Verify JS Bundle (catch errors early)
-        run: |
-          npx react-native bundle \
-            --platform android \
-            --dev false \
-            --entry-file index.ts \
-            --bundle-output /tmp/bundle.js \
-            --assets-dest /tmp/assets \
-            --verbose 2>&1 | tail -50
-
-      - name: 🔨 Build Release APK
-        run: |
-          set -o pipefail
-          cd android
-          ./gradlew assembleRelease --no-daemon 2>&1 | tee /tmp/gradle.log
-        env:
-          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4096m"
-
-      - name: 📋 List APK Output
-        run: |
-          echo "=== Searching for APK files ==="
-          find . -name "*.apk" 2>/dev/null || echo "No APK files found"
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
 
       - name: 📋 Get Version
         id: version
@@ -78,16 +60,8 @@ jobs:
           echo "version=v${VERSION}-${DATE}" >> $GITHUB_OUTPUT
           echo "apk_name=memo-${VERSION}.apk" >> $GITHUB_OUTPUT
 
-      - name: 🔍 Find APK
-        id: find_apk
-        run: |
-          APK_PATH=$(find android -name "*.apk" -path "*/release/*" | head -1)
-          echo "Found APK: $APK_PATH"
-          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
-
       - name: 🔖 Rename APK
-        run: |
-          cp "${{ steps.find_apk.outputs.apk_path }}" ${{ steps.version.outputs.apk_name }}
+        run: mv memo-release.apk ${{ steps.version.outputs.apk_name }}
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -105,7 +79,7 @@ jobs:
             - 🔒 Biometric lock with configurable timeout
             - 🛡️ AES-256 encrypted `.garden` vault backup
             - 👤 X-style profile with media grid
-            - 🔍 Local search
+            - 🔍 Local search & mood tags
 
             ### Installation
             1. Download `memo-*.apk` below
@@ -114,6 +88,6 @@ jobs:
             4. Install & enjoy your private garden 🌿
 
             ---
-            *Built automatically via GitHub Actions*
+            *Built automatically via GitHub Actions + EAS*
           files: ${{ steps.version.outputs.apk_name }}
           make_latest: true
