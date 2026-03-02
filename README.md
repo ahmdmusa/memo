@@ -101,15 +101,8 @@ Everything you save stays on your device, forever.
 
 <div align="center">
 
-Built with ❤️ by **Ahmed Moussa**
-
-<p align="center">
-  <a href="https://t.me/ahmdmusa">
-    <img src="https://img.icons8.com/color/30/telegram-app.png"/>
-  </a>
-  <a href="https://www.linkedin.com/in/ahmdmusa">
-    <img src="https://img.icons8.com/color/30/linkedin.png"/>
-  </a>
-</p>
+Built with ❤️ by **Ahmed Moussa** &nbsp;
+<a href="https://t.me/ahmdmusa"><img src="https://img.icons8.com/color/30/telegram-app.png"/></a>
+<a href="https://www.linkedin.com/in/ahmdmusa"><img src="https://img.icons8.com/color/30/linkedin.png"/></a>
 
 </div>
