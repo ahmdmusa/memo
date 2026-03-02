@@ -36,13 +36,14 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-font"
     ],
     "extra": {
       "eas": {
-        "projectId": "f581e8c1-e54b-49c0-8fba-bd9473081d85"
+        "projectId": "588b20c4-2464-41c4-ad10-912fce2bbe3b"
       }
     },
-    "owner": "ahmedmousa.dev"
+    "owner": "ahmedmousa-dev"
   }
 }
