@@ -84,7 +84,7 @@ export default function FeedScreen({ navigation }: Props) {
                         style={styles.emptyActionBtn}
                         onPress={() => openCreate(item.type)}
                     >
-                        <Ionicons name={item.icon} size={22} color={.accent} />
+                        <Ionicons name={item.icon} size={22} color={Colors.} />
                         <Text style={styles.emptyActionText}>{item.label}</Text>
                     </TouchableOpacity>
                 ))}
@@ -105,7 +105,7 @@ export default function FeedScreen({ navigation }: Props) {
                     style={styles.headerIconBtn}
                     onPress={() => (navigation as any).navigate('MainTabs', { screen: 'Profile' })}
                 >
-                    <Ionicons name="person-circle-outline" size={30} color={.accentLight} />
+                    <Ionicons name="person-circle-outline" size={30} color={Colors.} />
                 </TouchableOpacity>
             </View>
             {todayPosts.length > 0 && (
@@ -136,7 +136,7 @@ export default function FeedScreen({ navigation }: Props) {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
-                        tintColor={.accent}
+                        tintColor={Colors.}
                     />
                 }
                 showsVerticalScrollIndicator={false}
@@ -145,7 +145,7 @@ export default function FeedScreen({ navigation }: Props) {
             {/* FAB */}
             <Animated.View style={[styles.fabWrapper, { transform: [{ scale: fabAnim }] }]}>
                 <TouchableOpacity style={styles.fab} onPress={handleFabPress} activeOpacity={0.9}>
-                    <Ionicons name="add" size={28} color={.white} />
+                    <Ionicons name="add" size={28} color={Colors.} />
                 </TouchableOpacity>
             </Animated.View>
         </View>
