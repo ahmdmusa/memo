@@ -116,22 +116,22 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
 
     return (
         <View style={styles.container}>
-            <Text style={styles.hint}>
+            <Text style={[styles.hint, { color: Colors.textMuted }]}>
                 {isRecording ? 'Recording...' : 'Hold button to record'}
             </Text>
 
             {isRecording && (
                 <View style={styles.timerRow}>
-                    <View style={styles.recordingDot} />
-                    <Text style={styles.timer}>{formatDuration(duration)}</Text>
+                    <View style={[styles.recordingDot, { backgroundColor: Colors.danger }]} />
+                    <Text style={[styles.timer, { color: Colors.danger }]}>{formatDuration(duration)}</Text>
                 </View>
             )}
 
             {/* Pulse rings */}
             {isRecording && (
                 <>
-                    <Animated.View style={[styles.pulseRing, styles.pulseRing1, { transform: [{ scale: pulseAnim }] }]} />
-                    <Animated.View style={[styles.pulseRing, styles.pulseRing2, { transform: [{ scale: pulseAnim }], opacity: 0.4 }]} />
+                    <Animated.View style={[styles.pulseRing, styles.pulseRing1, { borderColor: Colors.danger, transform: [{ scale: pulseAnim }] }]} />
+                    <Animated.View style={[styles.pulseRing, styles.pulseRing2, { borderColor: Colors.danger, transform: [{ scale: pulseAnim }], opacity: 0.4 }]} />
                 </>
             )}
 
@@ -141,17 +141,17 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
                 onPressOut={isRecording ? stopRecording : undefined}
                 disabled={!isRecording && recording !== null}
             >
-                <Animated.View style={[styles.recordBtn, { transform: [{ scale: scaleAnim }] }, isRecording && styles.recordBtnActive]}>
+                <Animated.View style={[styles.recordBtn, { backgroundColor: Colors.danger, shadowColor: Colors.danger, transform: [{ scale: scaleAnim }] }, isRecording && styles.recordBtnActive]}>
                     <Ionicons
                         name={isRecording ? 'stop' : 'mic'}
                         size={36}
-                        color={.white}
+                        color={Colors.white}
                     />
                 </Animated.View>
             </Pressable>
 
             <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
-                <Text style={styles.cancelText}>Cancel</Text>
+                <Text style={[styles.cancelText, { color: Colors.textMuted }]}>Cancel</Text>
             </TouchableOpacity>
         </View>
     );
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
         gap: Spacing.lg },
     hint: {
         fontSize: FontSize.sm,
-        color: .textMuted,
         fontWeight: FontWeight.medium },
     timerRow: {
         flexDirection: 'row',
@@ -173,28 +172,23 @@ const styles = StyleSheet.create({
     recordingDot: {
         width: 8,
         height: 8,
-        borderRadius: 4,
-        backgroundColor: .danger },
+        borderRadius: 4 },
     timer: {
         fontSize: FontSize.xl,
         fontWeight: FontWeight.heavy,
-        color: .danger,
         fontVariant: ['tabular-nums'] },
     pulseRing: {
         position: 'absolute',
         borderRadius: 100,
-        borderWidth: 2,
-        borderColor: .danger },
+        borderWidth: 2 },
     pulseRing1: { width: 110, height: 110, opacity: 0.3 },
     pulseRing2: { width: 140, height: 140 },
     recordBtn: {
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: .danger,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: .danger,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
         shadowRadius: 16,
@@ -205,5 +199,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing.lg,
         paddingVertical: Spacing.sm },
     cancelText: {
-        fontSize: FontSize.sm,
-        color: .textMuted } });
+        fontSize: FontSize.sm } });

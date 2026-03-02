@@ -28,6 +28,65 @@ interface SectionData {
 export default function MemoriesScreen({ navigation }: Props) {
     const { colors: Colors } = useSettings();
 
+    const styles = StyleSheet.create({
+        container: { flex: 1, backgroundColor: Colors.bg },
+        header: {
+            paddingTop: 60,
+            paddingHorizontal: Spacing.md,
+            paddingBottom: Spacing.lg,
+            borderBottomWidth: 1,
+            borderBottomColor: Colors.border,
+            marginBottom: Spacing.md },
+        headerTitle: {
+            fontSize: FontSize.xxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.textPrimary,
+            marginBottom: 4 },
+        headerSub: {
+            fontSize: FontSize.sm,
+            color: Colors.textMuted },
+        sectionHeader: {
+            paddingHorizontal: Spacing.md,
+            paddingBottom: Spacing.sm,
+            paddingTop: Spacing.md },
+        sectionTitle: {
+            fontSize: FontSize.lg,
+            fontWeight: FontWeight.bold,
+            color: Colors.accentLight,
+            marginBottom: 2 },
+        sectionSub: {
+            fontSize: FontSize.xs,
+            color: Colors.textMuted,
+            textTransform: 'uppercase',
+            letterSpacing: 0.7,
+            fontWeight: FontWeight.medium },
+        list: { paddingBottom: 120 },
+        empty: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: Spacing.xl,
+            gap: Spacing.md },
+        emptyEmoji: { fontSize: 56 },
+        emptyTitle: {
+            fontSize: FontSize.xxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.textPrimary,
+            textAlign: 'center' },
+        emptyBody: {
+            fontSize: FontSize.md,
+            color: Colors.textSecondary,
+            textAlign: 'center',
+            lineHeight: 22 },
+        emptyStats: { alignItems: 'center', marginTop: Spacing.lg },
+        emptyStatNum: {
+            fontSize: FontSize.xxxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.accent },
+        emptyStatLabel: {
+            fontSize: FontSize.sm,
+            color: Colors.textMuted },
+    });
+
     const [sections, setSections] = useState<SectionData[]>([]);
     const [totalMemories, setTotalMemories] = useState(0);
 
@@ -129,64 +188,3 @@ export default function MemoriesScreen({ navigation }: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
-
-    header: {
-        paddingTop: 60,
-        paddingHorizontal: Spacing.md,
-        paddingBottom: Spacing.lg,
-        borderBottomWidth: 1,
-        borderBottomColor: .border,
-        marginBottom: Spacing.md },
-    headerTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        marginBottom: 4 },
-    headerSub: {
-        fontSize: FontSize.sm,
-        color: .textMuted },
-
-    sectionHeader: {
-        paddingHorizontal: Spacing.md,
-        paddingBottom: Spacing.sm,
-        paddingTop: Spacing.md },
-    sectionTitle: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.bold,
-        color: .accentLight,
-        marginBottom: 2 },
-    sectionSub: {
-        fontSize: FontSize.xs,
-        color: .textMuted,
-        textTransform: 'uppercase',
-        letterSpacing: 0.7,
-        fontWeight: FontWeight.medium },
-
-    list: { paddingBottom: 120 },
-
-    empty: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: Spacing.xl,
-        gap: Spacing.md },
-    emptyEmoji: { fontSize: 56 },
-    emptyTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        textAlign: 'center' },
-    emptyBody: {
-        fontSize: FontSize.md,
-        color: .textSecondary,
-        textAlign: 'center',
-        lineHeight: 22 },
-    emptyStats: { alignItems: 'center', marginTop: Spacing.lg },
-    emptyStatNum: {
-        fontSize: FontSize.xxxl,
-        fontWeight: FontWeight.heavy,
-        color: .accent },
-    emptyStatLabel: {
-        fontSize: FontSize.sm,
-        color: .textMuted } });

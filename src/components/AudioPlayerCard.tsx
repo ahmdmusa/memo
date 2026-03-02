@@ -105,14 +105,14 @@ export default function AudioPlayerCard({ uri, duration, compact = false }: Audi
         return `${m}:${s}`;
     };
 
-    const color = getPostColor('voice') ?? .accent;
-    const dim = getPostDim('voice') ?? .accentDim;
+    const color = getPostColor(Colors, 'voice');
+    const dim = getPostDim(Colors, 'voice');
 
     return (
         <View style={[styles.container, compact && styles.containerCompact, { backgroundColor: dim, borderColor: color + '40' }]}>
             {/* Play button */}
             <TouchableOpacity onPress={togglePlay} style={[styles.playBtn, { backgroundColor: color }]}>
-                <Ionicons name={isPlaying ? 'pause' : 'play'} size={20} color={.white} />
+                <Ionicons name={isPlaying ? 'pause' : 'play'} size={20} color={Colors.white} />
             </TouchableOpacity>
 
             <View style={styles.right}>
@@ -146,7 +146,7 @@ export default function AudioPlayerCard({ uri, duration, compact = false }: Audi
                 {/* Duration */}
                 <View style={styles.timeRow}>
                     <Text style={[styles.timeText, { color }]}>{formatMs(position)}</Text>
-                    <Text style={styles.timeMuted}>{formatMs(totalDuration)}</Text>
+                    <Text style={[styles.timeMuted, { color: Colors.textMuted }]}>{formatMs(totalDuration)}</Text>
                 </View>
             </View>
         </View>
@@ -199,5 +199,4 @@ const styles = StyleSheet.create({
         fontSize: FontSize.xs,
         fontWeight: FontWeight.bold },
     timeMuted: {
-        fontSize: FontSize.xs,
-        color: .textMuted } });
+        fontSize: FontSize.xs } });

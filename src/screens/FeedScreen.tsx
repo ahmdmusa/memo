@@ -29,6 +29,84 @@ interface Props {
 export default function FeedScreen({ navigation }: Props) {
     const { colors: Colors } = useSettings();
 
+    const styles = StyleSheet.create({
+        container: { flex: 1, backgroundColor: Colors.bg },
+        list: { paddingTop: Spacing.sm, paddingBottom: 100 },
+        emptyList: { flexGrow: 1 },
+        header: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: Spacing.md,
+            paddingTop: Spacing.xl,
+            paddingBottom: Spacing.md },
+        greeting: {
+            fontSize: FontSize.sm,
+            color: Colors.textMuted,
+            fontWeight: FontWeight.medium,
+            marginBottom: 2 },
+        headerTitle: {
+            fontSize: FontSize.xxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.textPrimary },
+        headerIconBtn: {
+            width: 44,
+            height: 44,
+            alignItems: 'center',
+            justifyContent: 'center' },
+        emptyContainer: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: Spacing.xl,
+            paddingTop: Spacing.xxl },
+        emptyEmoji: { fontSize: 56, marginBottom: Spacing.md },
+        emptyTitle: {
+            fontSize: FontSize.xxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.textPrimary,
+            marginBottom: Spacing.sm,
+            textAlign: 'center' },
+        emptyBody: {
+            fontSize: FontSize.md,
+            color: Colors.textSecondary,
+            textAlign: 'center',
+            lineHeight: 22,
+            marginBottom: Spacing.xl },
+        emptyActions: {
+            flexDirection: 'row',
+            gap: Spacing.md },
+        emptyActionBtn: {
+            alignItems: 'center',
+            gap: Spacing.xs,
+            backgroundColor: Colors.bgCard,
+            borderWidth: 1,
+            borderColor: Colors.border,
+            borderRadius: Radius.md,
+            paddingVertical: Spacing.md,
+            paddingHorizontal: Spacing.lg },
+        emptyActionText: {
+            fontSize: FontSize.sm,
+            color: Colors.textSecondary,
+            fontWeight: FontWeight.medium },
+        fabWrapper: {
+            position: 'absolute',
+            bottom: 28,
+            alignSelf: 'center' },
+        fab: {
+            width: 60,
+            height: 60,
+            borderRadius: 30,
+            backgroundColor: Colors.accent,
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: Colors.accent,
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.45,
+            shadowRadius: 16,
+            elevation: 12 },
+    });
+
     const [posts, setPosts] = useState<Post[]>([]);
     const [todayPosts, setTodayPosts] = useState<Post[]>([]);
     const [refreshing, setRefreshing] = useState(false);
@@ -84,7 +162,7 @@ export default function FeedScreen({ navigation }: Props) {
                         style={styles.emptyActionBtn}
                         onPress={() => openCreate(item.type)}
                     >
-                        <Ionicons name={item.icon} size={22} color={.accent} />
+                        <Ionicons name={item.icon} size={22} color={Colors.accent} />
                         <Text style={styles.emptyActionText}>{item.label}</Text>
                     </TouchableOpacity>
                 ))}
@@ -105,7 +183,7 @@ export default function FeedScreen({ navigation }: Props) {
                     style={styles.headerIconBtn}
                     onPress={() => (navigation as any).navigate('MainTabs', { screen: 'Profile' })}
                 >
-                    <Ionicons name="person-circle-outline" size={30} color={.accentLight} />
+                    <Ionicons name="person-circle-outline" size={30} color={Colors.accentLight} />
                 </TouchableOpacity>
             </View>
             {todayPosts.length > 0 && (
@@ -136,7 +214,7 @@ export default function FeedScreen({ navigation }: Props) {
                     <RefreshControl
                         refreshing={refreshing}
                         onRefresh={onRefresh}
-                        tintColor={.accent}
+                        tintColor={Colors.accent}
                     />
                 }
                 showsVerticalScrollIndicator={false}
@@ -145,89 +223,10 @@ export default function FeedScreen({ navigation }: Props) {
             {/* FAB */}
             <Animated.View style={[styles.fabWrapper, { transform: [{ scale: fabAnim }] }]}>
                 <TouchableOpacity style={styles.fab} onPress={handleFabPress} activeOpacity={0.9}>
-                    <Ionicons name="add" size={28} color={.white} />
+                    <Ionicons name="add" size={28} color={Colors.white} />
                 </TouchableOpacity>
             </Animated.View>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
-    list: { paddingTop: Spacing.sm, paddingBottom: 100 },
-    emptyList: { flexGrow: 1 },
-
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: Spacing.md,
-        paddingTop: Spacing.xl,
-        paddingBottom: Spacing.md },
-    greeting: {
-        fontSize: FontSize.sm,
-        color: .textMuted,
-        fontWeight: FontWeight.medium,
-        marginBottom: 2 },
-    headerTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary },
-    headerIconBtn: {
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center' },
-
-    emptyContainer: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: Spacing.xl,
-        paddingTop: Spacing.xxl },
-    emptyEmoji: { fontSize: 56, marginBottom: Spacing.md },
-    emptyTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        marginBottom: Spacing.sm,
-        textAlign: 'center' },
-    emptyBody: {
-        fontSize: FontSize.md,
-        color: .textSecondary,
-        textAlign: 'center',
-        lineHeight: 22,
-        marginBottom: Spacing.xl },
-    emptyActions: {
-        flexDirection: 'row',
-        gap: Spacing.md },
-    emptyActionBtn: {
-        alignItems: 'center',
-        gap: Spacing.xs,
-        backgroundColor: .bgCard,
-        borderWidth: 1,
-        borderColor: .border,
-        borderRadius: Radius.md,
-        paddingVertical: Spacing.md,
-        paddingHorizontal: Spacing.lg },
-    emptyActionText: {
-        fontSize: FontSize.sm,
-        color: .textSecondary,
-        fontWeight: FontWeight.medium },
-
-    fabWrapper: {
-        position: 'absolute',
-        bottom: 28,
-        alignSelf: 'center' },
-    fab: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: .accent,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: .accent,
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.45,
-        shadowRadius: 16,
-        elevation: 12 } });

@@ -26,6 +26,63 @@ export default function EditProfileScreen({ navigation }: Props) {
     const { colors: Colors } = useSettings();
 
     const insets = useSafeAreaInsets();
+
+    const styles = StyleSheet.create({
+        container: { flex: 1, backgroundColor: Colors.bg },
+        header: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: Spacing.sm,
+            paddingBottom: Spacing.md,
+            borderBottomWidth: 1,
+            borderBottomColor: Colors.border },
+        navBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
+        headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, color: Colors.textPrimary },
+        saveBtn: {
+            paddingHorizontal: Spacing.md,
+            paddingVertical: Spacing.sm,
+            backgroundColor: Colors.accent,
+            borderRadius: Radius.full },
+        saveBtnText: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.white },
+        scroll: { padding: Spacing.md },
+        avatarSection: { alignItems: 'center', marginBottom: Spacing.xl },
+        avatar: { width: 90, height: 90, borderRadius: 45, borderWidth: 3, borderColor: Colors.accent },
+        avatarPlaceholder: {
+            width: 90,
+            height: 90,
+            borderRadius: 45,
+            backgroundColor: Colors.accentDim,
+            borderWidth: 3,
+            borderColor: Colors.accent,
+            alignItems: 'center',
+            justifyContent: 'center' },
+        avatarLetter: { fontSize: 36, fontWeight: FontWeight.heavy, color: Colors.accentLight },
+        changeAvatarText: {
+            marginTop: Spacing.sm,
+            fontSize: FontSize.sm,
+            color: Colors.accentLight,
+            fontWeight: FontWeight.medium },
+        field: { marginBottom: Spacing.lg },
+        fieldLabel: {
+            fontSize: FontSize.xs,
+            fontWeight: FontWeight.semibold,
+            color: Colors.textMuted,
+            textTransform: 'uppercase',
+            letterSpacing: 0.8,
+            marginBottom: Spacing.sm },
+        fieldInput: {
+            fontSize: FontSize.md,
+            color: Colors.textPrimary,
+            backgroundColor: Colors.bgCard,
+            borderWidth: 1,
+            borderColor: Colors.border,
+            borderRadius: Radius.md,
+            padding: Spacing.md },
+        bioInput: { minHeight: 100, textAlignVertical: 'top', paddingTop: Spacing.md },
+        charCount: { fontSize: FontSize.xs, color: Colors.textMuted, marginTop: 4, alignSelf: 'flex-end' },
+    });
+
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
     const [avatarUri, setAvatarUri] = useState<string | undefined>();
@@ -71,7 +128,7 @@ export default function EditProfileScreen({ navigation }: Props) {
         >
             <View style={[styles.header, { paddingTop: insets.top + Spacing.sm }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.navBtn}>
-                    <Ionicons name="chevron-back" size={24} color={.textPrimary} />
+                    <Ionicons name="chevron-back" size={24} color={Colors.textPrimary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Edit Profile</Text>
                 <TouchableOpacity
@@ -102,7 +159,7 @@ export default function EditProfileScreen({ navigation }: Props) {
                         value={name}
                         onChangeText={setName}
                         placeholder="Your name"
-                        placeholderTextColor={.textMuted}
+                        placeholderTextColor={Colors.textMuted}
                         maxLength={40}
                     />
                 </View>
@@ -114,7 +171,7 @@ export default function EditProfileScreen({ navigation }: Props) {
                         value={bio}
                         onChangeText={setBio}
                         placeholder="A little about yourself..."
-                        placeholderTextColor={.textMuted}
+                        placeholderTextColor={Colors.textMuted}
                         multiline
                         maxLength={160}
                     />
@@ -125,57 +182,3 @@ export default function EditProfileScreen({ navigation }: Props) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: Spacing.sm,
-        paddingBottom: Spacing.md,
-        borderBottomWidth: 1,
-        borderBottomColor: .border },
-    navBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-    headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, color: .textPrimary },
-    saveBtn: {
-        paddingHorizontal: Spacing.md,
-        paddingVertical: Spacing.sm,
-        backgroundColor: .accent,
-        borderRadius: Radius.full },
-    saveBtnText: { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: .white },
-    scroll: { padding: Spacing.md },
-    avatarSection: { alignItems: 'center', marginBottom: Spacing.xl },
-    avatar: { width: 90, height: 90, borderRadius: 45, borderWidth: 3, borderColor: .accent },
-    avatarPlaceholder: {
-        width: 90,
-        height: 90,
-        borderRadius: 45,
-        backgroundColor: .accentDim,
-        borderWidth: 3,
-        borderColor: .accent,
-        alignItems: 'center',
-        justifyContent: 'center' },
-    avatarLetter: { fontSize: 36, fontWeight: FontWeight.heavy, color: .accentLight },
-    changeAvatarText: {
-        marginTop: Spacing.sm,
-        fontSize: FontSize.sm,
-        color: .accentLight,
-        fontWeight: FontWeight.medium },
-    field: { marginBottom: Spacing.lg },
-    fieldLabel: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.semibold,
-        color: .textMuted,
-        textTransform: 'uppercase',
-        letterSpacing: 0.8,
-        marginBottom: Spacing.sm },
-    fieldInput: {
-        fontSize: FontSize.md,
-        color: .textPrimary,
-        backgroundColor: .bgCard,
-        borderWidth: 1,
-        borderColor: .border,
-        borderRadius: Radius.md,
-        padding: Spacing.md },
-    bioInput: { minHeight: 100, textAlignVertical: 'top', paddingTop: Spacing.md },
-    charCount: { fontSize: FontSize.xs, color: .textMuted, marginTop: 4, alignSelf: 'flex-end' } });
