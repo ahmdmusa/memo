@@ -72,9 +72,16 @@ jobs:
           echo "version=v${VERSION}-${DATE}" >> $GITHUB_OUTPUT
           echo "apk_name=memo-${VERSION}.apk" >> $GITHUB_OUTPUT
 
+      - name: 🔍 Find APK
+        id: find_apk
+        run: |
+          APK_PATH=$(find android -name "*.apk" -path "*/release/*" | head -1)
+          echo "Found APK: $APK_PATH"
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+
       - name: 🔖 Rename APK
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk ${{ steps.version.outputs.apk_name }}
+          cp "${{ steps.find_apk.outputs.apk_path }}" ${{ steps.version.outputs.apk_name }}
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v2
