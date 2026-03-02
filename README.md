@@ -3,84 +3,99 @@
 <img src="assets/icon.png" width="120" height="120" style="border-radius: 24px;" />
 
 # memo
+
 ### *Your private garden. Always offline. Always yours.*
+### *حديقتك الخاصة. دائماً بدون إنترنت. دائماً لك وحدك.*
 
 [![Build Android APK](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml/badge.svg)](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml)
 ![Platform](https://img.shields.io/badge/platform-Android-black?logo=android)
 ![Framework](https://img.shields.io/badge/React%20Native-Expo-blue?logo=expo)
-![License](https://img.shields.io/badge/license-Private-lightgrey)
+![Offline](https://img.shields.io/badge/100%25-Offline-success)
 
 </div>
 
 ---
 
-## ✦ What is memo?
+## 🇬🇧 English
 
-**memo** is a beautiful, completely offline-first journaling app. It looks and feels like Instagram meets X (Twitter) — but it's 100% private and lives only on your device. No accounts, no cloud sync, no social features. Just you and your thoughts.
+**memo** is a private, offline-first journaling app designed to feel as beautiful and fluid as Instagram and X (Twitter) — but completely local. No accounts. No cloud. No tracking. Just a safe, elegant space for your thoughts, photos, voice notes, and memories.
 
----
+Everything you save stays on your device, forever.
 
-## ✦ Features
+### ✦ Features
 
-| Feature | Description |
-|---|---|
-| 📝 **Text Posts** | X-style minimalist text entries with Markdown support |
-| 📷 **Photo Posts** | Instagram-style image capture from camera or gallery |
-| 🎙️ **Voice Notes** | Press-and-hold to record, WhatsApp-style animated waveform |
-| 🎬 **Video Posts** | Local video capture and playback |
-| 🌑 **Deep Black Theme** | X/Twitter-inspired Dark Mode (`#000000`) |
-| 🎨 **Dynamic Themes** | Switchable accent colors and theme modes |
-| 🔒 **Biometric Lock** | Fingerprint/Face lock with configurable grace period |
-| 🛡️ **The Vault** | AES-256 encrypted `.garden` backup files |
-| 📍 **Mood Tags** | Emoji tags for emotional context |
-| 🗂️ **Memory Lane** | Browse your past entries by date |
-| 👤 **X-Style Profile** | Cover photo, avatar, bio + Posts & Media tabs |
-| 🔍 **Local Search** | Filter posts by text or hashtags |
+| | Feature | Description |
+|---|---|---|
+| 📝 | **Text Posts** | Write freely with Markdown formatting (bold, lists, etc.) |
+| 📷 | **Photo Posts** | Capture from camera or pick from gallery — no forced cropping |
+| 🎬 | **Video Posts** | Record and play local videos natively |
+| 🎙️ | **Voice Notes** | Press-and-hold to record — WhatsApp-style animated waveform |
+| 🌑 | **Deep Black Theme** | X/Twitter-inspired true dark mode (`#000000`) |
+| 🎨 | **Dynamic Theme Engine** | Switch between Light, Dim, and Deep Black modes + custom accent colors |
+| 🔒 | **Biometric Lock** | Fingerprint / Face ID with configurable grace period |
+| 🛡️ | **The Vault** | Export an AES-256 encrypted `.garden` backup using your own password |
+| 👤 | **X-Style Profile** | Cover photo, avatar, bio, Posts tab & Media grid |
+| 🗂️ | **Memory Lane** | Browse all your past entries in a timeline |
+| 🔍 | **Local Search** | Search posts by text or hashtags — 100% on-device |
+| ⚡ | **Haptic Feedback** | Subtle vibrations on key interactions |
+| 🕐 | **Timestamps** | Every post shows exact date & time |
+| 😌 | **Mood Tags** | Attach an emoji to express how you feel |
 
----
+### ✦ Download APK
 
-## ✦ Stack
+The APK is built automatically on every push using **GitHub Actions** — completely free.
 
-- **Framework:** React Native (Expo SDK 55)
-- **Database:** expo-sqlite (100% local SQLite)
-- **Storage:** expo-file-system (media files)
-- **Audio:** expo-av (recording & playback)
-- **Security:** expo-local-authentication + AES-256 (crypto-js)
-- **Navigation:** React Navigation (Stack + Bottom Tabs)
+👉 **[Click here to download the latest APK](https://github.com/ahmdmusa/memo/actions)**
 
----
-
-## ✦ Architecture
-
-```
-src/
-├── components/       # PostCard, VoiceRecorder, AudioPlayerCard
-├── context/          # SettingsContext (theme, lock, accent color)
-├── db/               # database.ts — SQLite schema & queries
-├── navigation/       # AppNavigator
-├── screens/          # Feed, Create, Profile, Memories, Settings...
-├── theme/            # colors.ts, index.ts
-├── types/            # TypeScript type definitions
-└── utils/            # vault.ts — AES-256 backup & restore
-```
+1. Open the link above
+2. Click the latest ✅ **successful workflow run**
+3. Scroll down to **Artifacts**
+4. Download `memo-release.apk`
+5. Transfer to your Android phone, enable "Install from unknown sources", and install!
 
 ---
 
-## ✦ Download APK
+## 🇸🇦 العربية
 
-The APK is automatically built via **GitHub Actions** on every push.
+**memo** هو تطبيق يوميات خاص وأنيق مستوحى من تصميم Instagram وX (تويتر) — لكنه يعمل بالكامل بدون إنترنت. لا حسابات، لا سيرفرات، لا مراقبة. مجرد مساحة آمنة وجميلة لأفكارك وصورك ومذكراتك الصوتية وذكرياتك.
 
-👉 **[Download from Actions Artifacts](https://github.com/ahmdmusa/memo/actions)**
+كل ما تحفظه يبقى على جهازك للأبد.
 
-1. Click the latest successful workflow run
-2. Scroll to **Artifacts**
-3. Download `memo-release.apk`
-4. Install on Android (enable "Unknown sources" if prompted)
+### ✦ المميزات
+
+| | الميزة | الوصف |
+|---|---|---|
+| 📝 | **بوستات نصية** | اكتب بحرية مع دعم تنسيق Markdown (عريض، قوائم...) |
+| 📷 | **بوستات صور** | التقط من الكاميرا أو اختر من المعرض — بدون قص إجباري |
+| 🎬 | **بوستات فيديو** | سجّل وشغّل الفيديوهات المحلية بشكل أصلي |
+| 🎙️ | **ملاحظات صوتية** | اضغط مطولاً للتسجيل — موجة متحركة بأسلوب واتساب |
+| 🌑 | **الوضع الأسود** | وضع ليلي أصيل مستوحى من X (أسود `#000000`) |
+| 🎨 | **محرك الثيمات الديناميكي** | تبديل بين الفاتح والداكن والأسود الكامل + ألوان تمييز مخصصة |
+| 🔒 | **القفل البيومتري** | بصمة الإصبع/Face ID مع فترة سماح قابلة للضبط |
+| 🛡️ | **The Vault (الخزنة)** | احتياطي مشفر AES-256 بصيغة `.garden` بكلمة مرورك الخاصة |
+| 👤 | **بروفايل بأسلوب X** | صورة غلاف، أفاتار، بيو، تاب بوستات وتاب وسائط |
+| 🗂️ | **ممر الذكريات** | تصفّح كل إدخالاتك السابقة في تايملاين مرتب |
+| 🔍 | **بحث محلي** | ابحث في بوستاتك بالنص أو الهاشتاق — على الجهاز مباشرة |
+| ⚡ | **ردود الفعل اللمسية** | اهتزازات خفية عند التفاعلات الأساسية |
+| 🕐 | **الطوابع الزمنية** | كل بوست يعرض التاريخ والوقت بالتفصيل |
+| 😌 | **تاجات المزاج** | ارفق إيموجي يعبّر عن حالتك |
+
+### ✦ تحميل التطبيق (APK)
+
+ملف الـ APK يُبنى تلقائياً عند كل رفع للكود عبر **GitHub Actions** — مجاناً تماماً.
+
+👉 **[اضغط هنا لتحميل أحدث نسخة](https://github.com/ahmdmusa/memo/actions)**
+
+1. افتح الرابط أعلاه
+2. اضغط على آخر تشغيل ✅ ناجح
+3. انزل لأسفل لقسم **Artifacts**
+4. حمّل `memo-release.apk`
+5. انقله لهاتفك، فعّل "تثبيت من مصادر غير معروفة"، وثبّت التطبيق!
 
 ---
 
-## ✦ Developer
+<div align="center">
 
-Built with care by **Ahmed Musa**
+Built with ❤️ by **Ahmed Musa** &nbsp;•&nbsp; [![Telegram](https://img.shields.io/badge/Contact-Telegram-2CA5E0?logo=telegram)](https://t.me/ahmdmusa)
 
-[![Telegram](https://img.shields.io/badge/Contact-Telegram-2CA5E0?logo=telegram)](https://t.me/ahmdmusa)
+</div>
