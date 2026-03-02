@@ -3,7 +3,10 @@ name: Build Android APK
 on:
   push:
     branches: [main, master]
-  workflow_dispatch: # allows manual trigger from GitHub UI
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-android:
@@ -32,7 +35,7 @@ jobs:
       - name: 📦 Install Dependencies
         run: npm ci
 
-      - name: 🛠️ Prebuild Android Native Code
+      - name: 🛠️ Prebuild Android
         run: npx expo prebuild --platform android --clean
         env:
           EXPO_NO_TELEMETRY: 1
@@ -47,14 +50,43 @@ jobs:
         env:
           GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx4096m"
 
-      - name: 📤 Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: memo-release.apk
-          path: android/app/build/outputs/apk/release/*.apk
-          retention-days: 30
-
-      - name: 🔔 Build Complete
+      - name: 📋 Get Version
+        id: version
         run: |
-          echo "✅ APK Build Successful!"
-          echo "📥 Download the APK from the GitHub Actions 'Artifacts' section above."
+          VERSION=$(node -p "require('./package.json').version")
+          DATE=$(date +'%Y.%m.%d')
+          echo "version=v${VERSION}-${DATE}" >> $GITHUB_OUTPUT
+          echo "apk_name=memo-${VERSION}.apk" >> $GITHUB_OUTPUT
+
+      - name: 🔖 Rename APK
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk ${{ steps.version.outputs.apk_name }}
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: "memo ${{ steps.version.outputs.version }}"
+          body: |
+            ## 📱 memo — Private Journaling App
+
+            A private, offline-first journaling app. No accounts. No cloud. No tracking.
+
+            ### What's included
+            - ✍️ Text, photo, video & voice posts
+            - 🌑 Deep Black theme (X-style)
+            - 🔒 Biometric lock with configurable timeout
+            - 🛡️ AES-256 encrypted `.garden` vault backup
+            - 👤 X-style profile with media grid
+            - 🔍 Local search
+
+            ### Installation
+            1. Download `memo-*.apk` below
+            2. Transfer to your Android device
+            3. Enable **"Install from unknown sources"**
+            4. Install & enjoy your private garden 🌿
+
+            ---
+            *Built automatically via GitHub Actions*
+          files: ${{ steps.version.outputs.apk_name }}
+          make_latest: true
