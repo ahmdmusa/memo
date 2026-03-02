@@ -67,17 +67,17 @@ export default function ExploreScreen({ navigation }: Props) {
             <View style={styles.header}>
                 <Text style={styles.title}>Explore</Text>
                 <View style={styles.searchBar}>
-                    <Ionicons name="search" size={16} color={Colors.} />
+                    <Ionicons name="search" size={16} color={Colors.textMuted} />
                     <TextInput
                         style={styles.searchInput}
                         placeholder="Search memories..."
-                        placeholderTextColor={Colors.}
+                        placeholderTextColor={Colors.textMuted}
                         value={query}
                         onChangeText={handleSearch}
                     />
                     {query.length > 0 && (
                         <TouchableOpacity onPress={() => handleSearch('')}>
-                            <Ionicons name="close-circle" size={16} color={Colors.} />
+                            <Ionicons name="close-circle" size={16} color={Colors.textMuted} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -122,7 +122,7 @@ export default function ExploreScreen({ navigation }: Props) {
                 )}
                 ListEmptyComponent={
                     <View style={styles.empty}>
-                        <Ionicons name="search-outline" size={40} color={Colors.} />
+                        <Ionicons name="search-outline" size={40} color={Colors.textMuted} />
                         <Text style={styles.emptyText}>
                             {query ? 'No results found' : 'Nothing here yet'}
                         </Text>

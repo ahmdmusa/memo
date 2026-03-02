@@ -112,7 +112,7 @@ export default function AudioPlayerCard({ uri, duration, compact = false }: Audi
         <View style={[styles.container, compact && styles.containerCompact, { backgroundColor: dim, borderColor: color + '40' }]}>
             {/* Play button */}
             <TouchableOpacity onPress={togglePlay} style={[styles.playBtn, { backgroundColor: color }]}>
-                <Ionicons name={isPlaying ? 'pause' : 'play'} size={20} color={Colors.} />
+                <Ionicons name={isPlaying ? 'pause' : 'play'} size={20} color={Colors.white} />
             </TouchableOpacity>
 
             <View style={styles.right}>

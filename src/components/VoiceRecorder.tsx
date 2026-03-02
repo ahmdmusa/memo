@@ -145,7 +145,7 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
                     <Ionicons
                         name={isRecording ? 'stop' : 'mic'}
                         size={36}
-                        color={Colors.}
+                        color={Colors.white}
                     />
                 </Animated.View>
             </Pressable>

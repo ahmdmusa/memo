@@ -61,14 +61,14 @@ export default function PostDetailScreen({ navigation, route }: Props) {
             {/* Nav Bar */}
             <View style={styles.navbar}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.navBtn}>
-                    <Ionicons name="chevron-back" size={24} color={Colors.} />
+                    <Ionicons name="chevron-back" size={24} color={Colors.textPrimary} />
                 </TouchableOpacity>
                 <View style={[styles.typePill, { backgroundColor: dim }]}>
                     <Ionicons name={TYPE_ICON[post.type]} size={14} color={color} />
                     <Text style={[styles.typePillText, { color }]}>{TYPE_LABEL[post.type]}</Text>
                 </View>
                 <TouchableOpacity onPress={handleDelete} style={styles.navBtn}>
-                    <Ionicons name="trash-outline" size={20} color={Colors.} />
+                    <Ionicons name="trash-outline" size={20} color={Colors.danger} />
                 </TouchableOpacity>
             </View>
 

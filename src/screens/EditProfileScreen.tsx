@@ -71,7 +71,7 @@ export default function EditProfileScreen({ navigation }: Props) {
         >
             <View style={[styles.header, { paddingTop: insets.top + Spacing.sm }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.navBtn}>
-                    <Ionicons name="chevron-back" size={24} color={Colors.} />
+                    <Ionicons name="chevron-back" size={24} color={Colors.textPrimary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Edit Profile</Text>
                 <TouchableOpacity
@@ -102,7 +102,7 @@ export default function EditProfileScreen({ navigation }: Props) {
                         value={name}
                         onChangeText={setName}
                         placeholder="Your name"
-                        placeholderTextColor={Colors.}
+                        placeholderTextColor={Colors.textMuted}
                         maxLength={40}
                     />
                 </View>
@@ -114,7 +114,7 @@ export default function EditProfileScreen({ navigation }: Props) {
                         value={bio}
                         onChangeText={setBio}
                         placeholder="A little about yourself..."
-                        placeholderTextColor={Colors.}
+                        placeholderTextColor={Colors.textMuted}
                         multiline
                         maxLength={160}
                     />
