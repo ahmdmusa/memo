@@ -6,11 +6,11 @@
 
 **Your private garden. Always offline. Always yours.**
 
+[![Latest Release](https://img.shields.io/github/v/release/ahmdmusa/memo?label=Download&color=black&logo=android)](https://github.com/ahmdmusa/memo/releases/latest)
+&nbsp;
 [![Build APK](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml/badge.svg)](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml)
 &nbsp;
-![Platform](https://img.shields.io/badge/Android-black?logo=android&logoColor=white)
-&nbsp;
-![Offline](https://img.shields.io/badge/100%25%20Offline-success?logo=lock&logoColor=white)
+![Offline](https://img.shields.io/badge/100%25%20Offline-success)
 &nbsp;
 ![React Native](https://img.shields.io/badge/Expo%20SDK%2055-blue?logo=expo&logoColor=white)
 
@@ -48,14 +48,14 @@ Everything you save stays on your device, forever.
 
 ## Download
 
-The APK is built automatically on every push via **GitHub Actions**.
+**[→ Download Latest APK](https://github.com/ahmdmusa/memo/releases/latest)**
 
-**[→ Download Latest APK](https://github.com/ahmdmusa/memo/actions)**
+1. Click the link above
+2. Under **Assets**, tap `memo-*.apk`
+3. Transfer to your Android device
+4. Install *(enable "Install from unknown sources" if prompted)*
 
-1. Click the latest ✅ successful workflow run
-2. Scroll to **Artifacts**
-3. Download `memo-release.apk`
-4. Install on your Android device *(enable "Install from unknown sources" if prompted)*
+> The APK is built and released automatically on every push via GitHub Actions.
 
 ---
 
@@ -89,14 +89,13 @@ The APK is built automatically on every push via **GitHub Actions**.
 
 ## التحميل
 
-ملف الـ APK يُبنى تلقائياً عند كل رفع عبر **GitHub Actions**.
+**[← تحميل أحدث نسخة](https://github.com/ahmdmusa/memo/releases/latest)**
 
-**[← تحميل أحدث نسخة APK](https://github.com/ahmdmusa/memo/actions)**
+1. افتح الرابط أعلاه
+2. تحت **Assets**، اضغط على `memo-*.apk`
+3. نقّله لهاتفك وثبّته *(فعّل "تثبيت من مصادر غير معروفة" إذا طُلب)*
 
-1. افتح الرابط أعلاه واضغط على آخر تشغيل ✅ ناجح
-2. انزل لقسم **Artifacts**
-3. حمّل ملف `memo-release.apk`
-4. نقّله لهاتفك وثبّته *(فعّل "تثبيت من مصادر غير معروفة" إذا طُلب)*
+> الـ APK يُبنى ويُنشر تلقائياً عند كل رفع عبر GitHub Actions.
 
 ---
 
