@@ -45,12 +45,15 @@ jobs:
       - name: 🔑 Setup Expo Token
         run: echo "EXPO_TOKEN=${{ secrets.EXPO_TOKEN }}" >> $GITHUB_ENV
 
-      - name: 🛠️ Build APK with EAS Local
+      - name: 🛠️ Prebuild Android
+        run: npx expo prebuild --platform android --clean
+
+      - name: 🔨 Build APK (Gradle)
         run: |
-          eas build --platform android --profile preview --local --non-interactive --output ./memo-release.apk
+          cd android
+          ./gradlew assembleRelease
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-          EAS_LOCAL_BUILD_SKIP_CLEANUP: 1
 
       - name: 📋 Get Version
         id: version
@@ -61,7 +64,7 @@ jobs:
           echo "apk_name=memo-${VERSION}.apk" >> $GITHUB_OUTPUT
 
       - name: 🔖 Rename APK
-        run: mv memo-release.apk ${{ steps.version.outputs.apk_name }}
+        run: mv android/app/build/outputs/apk/release/app-release.apk ${{ steps.version.outputs.apk_name }}
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v2
