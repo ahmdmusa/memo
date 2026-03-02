@@ -5,10 +5,11 @@ import {
     StyleSheet,
     TouchableOpacity,
     Animated,
-    Easing } from 'react-native';
+    Easing
+} from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { Ionicons } from '@expo/vector-icons';
-import {  Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, FontSize, FontWeight } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface BiometricLockProps {
@@ -53,7 +54,8 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
                 promptMessage: 'Unlock Private Garden',
                 fallbackLabel: 'Use Passcode',
                 cancelLabel: 'Cancel',
-                disableDeviceFallback: false });
+                disableDeviceFallback: false
+            });
             if (result.success) {
                 onUnlocked();
             } else {
@@ -67,6 +69,90 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
 
     if (!supported) return null;
 
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: Colors.bg,
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        glow: {
+            position: 'absolute',
+            width: 300,
+            height: 300,
+            borderRadius: 150,
+            backgroundColor: Colors.accent,
+            opacity: 0.04,
+            top: '30%',
+            alignSelf: 'center'
+        },
+        content: {
+            alignItems: 'center',
+            paddingHorizontal: Spacing.xl
+        },
+        iconWrapper: {
+            marginBottom: Spacing.xl
+        },
+        iconRing: {
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            backgroundColor: Colors.accentDim,
+            borderWidth: 2,
+            borderColor: Colors.accent + '60',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        title: {
+            fontSize: FontSize.xxxl,
+            fontWeight: FontWeight.heavy,
+            color: Colors.textPrimary,
+            marginBottom: Spacing.sm,
+            textAlign: 'center'
+        },
+        subtitle: {
+            fontSize: FontSize.sm,
+            color: Colors.textMuted,
+            textAlign: 'center',
+            marginBottom: Spacing.xl
+        },
+        errorBadge: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 6,
+            backgroundColor: 'rgba(239,68,68,0.1)',
+            borderColor: Colors.danger + '40',
+            borderWidth: 1,
+            borderRadius: Radius.full,
+            paddingHorizontal: Spacing.md,
+            paddingVertical: Spacing.xs,
+            marginBottom: Spacing.md
+        },
+        errorText: {
+            fontSize: FontSize.sm,
+            color: Colors.danger
+        },
+        unlockBtn: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: Spacing.sm,
+            backgroundColor: Colors.accent,
+            paddingHorizontal: Spacing.xl,
+            paddingVertical: Spacing.md,
+            borderRadius: Radius.full,
+            shadowColor: Colors.accent,
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.4,
+            shadowRadius: 12,
+            elevation: 10
+        },
+        unlockText: {
+            fontSize: FontSize.md,
+            fontWeight: FontWeight.bold,
+            color: Colors.white
+        }
+    });
+
     return (
         <View style={styles.container}>
             {/* Background glow */}
@@ -75,7 +161,7 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
             <View style={styles.content}>
                 <View style={styles.iconWrapper}>
                     <Animated.View style={[styles.iconRing, { transform: [{ scale: pulseAnim }] }]}>
-                        <Ionicons name="lock-closed" size={36} color={.accentLight} />
+                        <Ionicons name="lock-closed" size={36} color={Colors.accentLight} />
                     </Animated.View>
                 </View>
 
@@ -84,88 +170,16 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
 
                 {error ? (
                     <View style={styles.errorBadge}>
-                        <Ionicons name="warning-outline" size={14} color={.danger} />
+                        <Ionicons name="warning-outline" size={14} color={Colors.danger} />
                         <Text style={styles.errorText}>{error}</Text>
                     </View>
                 ) : null}
 
                 <TouchableOpacity style={styles.unlockBtn} onPress={authenticate} activeOpacity={0.85}>
-                    <Ionicons name="finger-print-outline" size={22} color={.white} />
+                    <Ionicons name="finger-print-outline" size={22} color={Colors.white} />
                     <Text style={styles.unlockText}>Tap to Unlock</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: .bg,
-        alignItems: 'center',
-        justifyContent: 'center' },
-    glow: {
-        position: 'absolute',
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        backgroundColor: .accent,
-        opacity: 0.04,
-        top: '30%',
-        alignSelf: 'center' },
-    content: {
-        alignItems: 'center',
-        paddingHorizontal: Spacing.xl },
-    iconWrapper: {
-        marginBottom: Spacing.xl },
-    iconRing: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: .accentDim,
-        borderWidth: 2,
-        borderColor: .accent + '60',
-        alignItems: 'center',
-        justifyContent: 'center' },
-    title: {
-        fontSize: FontSize.xxxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        marginBottom: Spacing.sm,
-        textAlign: 'center' },
-    subtitle: {
-        fontSize: FontSize.sm,
-        color: .textMuted,
-        textAlign: 'center',
-        marginBottom: Spacing.xl },
-    errorBadge: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 6,
-        backgroundColor: 'rgba(239,68,68,0.1)',
-        borderColor: .danger + '40',
-        borderWidth: 1,
-        borderRadius: Radius.full,
-        paddingHorizontal: Spacing.md,
-        paddingVertical: Spacing.xs,
-        marginBottom: Spacing.md },
-    errorText: {
-        fontSize: FontSize.sm,
-        color: .danger },
-    unlockBtn: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: Spacing.sm,
-        backgroundColor: .accent,
-        paddingHorizontal: Spacing.xl,
-        paddingVertical: Spacing.md,
-        borderRadius: Radius.full,
-        shadowColor: .accent,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.4,
-        shadowRadius: 12,
-        elevation: 10 },
-    unlockText: {
-        fontSize: FontSize.md,
-        fontWeight: FontWeight.bold,
-        color: .white } });
