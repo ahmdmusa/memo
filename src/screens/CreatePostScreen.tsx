@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     View, Text, StyleSheet, TextInput, TouchableOpacity,
     ScrollView, KeyboardAvoidingView, Platform, Image,
@@ -15,6 +15,7 @@ import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from 
 import { createPost, saveImageLocally } from '../db/database';
 import VoiceRecorder from '../components/VoiceRecorder';
 import { useSettings } from '../context/SettingsContext';
+import { RichEditor, RichToolbar, actions } from 'react-native-pell-rich-editor';
 
 type Props = {
     navigation: StackNavigationProp<RootStackParamList, 'CreatePost'>;
@@ -46,6 +47,8 @@ export default function CreatePostScreen({ navigation, route }: Props) {
     const [voiceDurationMs, setVoiceDurationMs] = useState(0);
     const [mood, setMood] = useState<Mood | null>(null);
     const [saving, setSaving] = useState(false);
+
+    const richText = useRef<RichEditor>(null);
 
     const color = getPostColor(Colors, selectedType);
     const dim = getPostDim(Colors, selectedType);
@@ -227,24 +230,47 @@ export default function CreatePostScreen({ navigation, route }: Props) {
                                     autoFocus={true}
                                 />
                             )}
-                            <TextInput
-                                style={[
-                                    styles.bodyInput,
-                                    { color: Colors.textPrimary },
-                                    selectedType === 'thought' && { fontSize: FontSize.lg, fontStyle: 'italic' }
-                                ]}
-                                placeholder={
-                                    selectedType === 'thought' ? "What's on your mind? (Markdown supported)" :
-                                        selectedType === 'article' ? "Write your article here..." :
-                                            "Add a caption..."
-                                }
-                                placeholderTextColor={Colors.textMuted}
-                                value={body}
-                                onChangeText={setBody}
-                                multiline
-                                textAlignVertical="top"
-                                autoFocus={selectedType !== 'article'}
-                            />
+                            <View style={[styles.richTextContainer, { borderColor: Colors.border }]}>
+                                {['thought', 'article'].includes(selectedType) && (
+                                    <RichToolbar
+                                        editor={richText}
+                                        actions={[
+                                            actions.setBold,
+                                            actions.setItalic,
+                                            actions.setUnderline,
+                                            actions.insertBulletsList,
+                                            actions.insertOrderedList,
+                                            actions.checkboxList,
+                                            actions.alignLeft,
+                                            actions.alignCenter,
+                                            actions.alignRight,
+                                            actions.undo,
+                                            actions.redo,
+                                        ]}
+                                        iconTint={Colors.textSecondary}
+                                        selectedIconTint={color}
+                                        disabledIconTint={Colors.borderLight}
+                                        style={[styles.richToolbar, { backgroundColor: Colors.bgCard, borderBottomColor: Colors.border }]}
+                                    />
+                                )}
+                                <RichEditor
+                                    ref={richText}
+                                    style={styles.richTextEditor}
+                                    placeholder={
+                                        selectedType === 'thought' ? "What's on your mind?" :
+                                            selectedType === 'article' ? "Write your article here..." :
+                                                "Add a caption..."
+                                    }
+                                    initialContentHTML={body}
+                                    onChange={setBody}
+                                    editorStyle={{
+                                        backgroundColor: Colors.bg,
+                                        color: Colors.textPrimary,
+                                        placeholderColor: Colors.textMuted,
+                                        contentCSSText: `font-size: ${selectedType === 'thought' ? 18 : 16}px; min-height: 200px; padding-top: 12px;`
+                                    }}
+                                />
+                            </View>
                         </>
                     )}
 
@@ -301,12 +327,7 @@ export default function CreatePostScreen({ navigation, route }: Props) {
                     )}
                 </View>
 
-                {/* Markdown Hint */}
-                {['thought', 'article'].includes(selectedType) && (
-                    <Text style={[styles.markdownHint, { color: Colors.textMuted }]}>
-                        Markdown supported: **bold**, *italic*, - list, # headers
-                    </Text>
-                )}
+                {/* Markdown Hint Removed - Using Rich Text */}
 
                 <View style={{ height: 100 }} />
             </ScrollView>
@@ -394,11 +415,18 @@ const styles = StyleSheet.create({
         borderBottomWidth: StyleSheet.hairlineWidth,
         marginBottom: Spacing.sm,
     },
-    bodyInput: {
-        fontSize: FontSize.md,
-        minHeight: 120,
-        paddingTop: Spacing.sm,
-        lineHeight: 24,
+    richTextContainer: {
+        minHeight: 200,
+        borderRadius: Radius.md,
+        borderWidth: StyleSheet.hairlineWidth,
+        overflow: 'hidden'
+    },
+    richToolbar: {
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    richTextEditor: {
+        flex: 1,
+        minHeight: 200,
     },
     mediaContainer: {
         marginTop: Spacing.lg,
