@@ -6,12 +6,13 @@ import {
     TouchableOpacity,
     Pressable,
     Animated,
-    Alert } from 'react-native';
+    Alert
+} from 'react-native';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import {  Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, FontSize, FontWeight } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface VoiceRecorderProps {
@@ -54,7 +55,8 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
             }
             await Audio.setAudioModeAsync({
                 allowsRecordingIOS: true,
-                playsInSilentModeIOS: true });
+                playsInSilentModeIOS: true
+            });
 
             const { recording: rec } = await Audio.Recording.createAsync(
                 Audio.RecordingOptionsPresets.HIGH_QUALITY,
@@ -116,22 +118,22 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
 
     return (
         <View style={styles.container}>
-            <Text style={styles.hint}>
+            <Text style={[styles.hint, { color: Colors.textMuted }]}>
                 {isRecording ? 'Recording...' : 'Hold button to record'}
             </Text>
 
             {isRecording && (
                 <View style={styles.timerRow}>
-                    <View style={styles.recordingDot} />
-                    <Text style={styles.timer}>{formatDuration(duration)}</Text>
+                    <View style={[styles.recordingDot, { backgroundColor: Colors.danger }]} />
+                    <Text style={[styles.timer, { color: Colors.danger }]}>{formatDuration(duration)}</Text>
                 </View>
             )}
 
             {/* Pulse rings */}
             {isRecording && (
                 <>
-                    <Animated.View style={[styles.pulseRing, styles.pulseRing1, { transform: [{ scale: pulseAnim }] }]} />
-                    <Animated.View style={[styles.pulseRing, styles.pulseRing2, { transform: [{ scale: pulseAnim }], opacity: 0.4 }]} />
+                    <Animated.View style={[styles.pulseRing, styles.pulseRing1, { borderColor: Colors.danger, transform: [{ scale: pulseAnim }] }]} />
+                    <Animated.View style={[styles.pulseRing, styles.pulseRing2, { borderColor: Colors.danger, transform: [{ scale: pulseAnim }], opacity: 0.4 }]} />
                 </>
             )}
 
@@ -141,7 +143,7 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
                 onPressOut={isRecording ? stopRecording : undefined}
                 disabled={!isRecording && recording !== null}
             >
-                <Animated.View style={[styles.recordBtn, { transform: [{ scale: scaleAnim }] }, isRecording && styles.recordBtnActive]}>
+                <Animated.View style={[styles.recordBtn, { backgroundColor: Colors.danger, shadowColor: Colors.danger, transform: [{ scale: scaleAnim }] }, isRecording && styles.recordBtnActive]}>
                     <Ionicons
                         name={isRecording ? 'stop' : 'mic'}
                         size={36}
@@ -151,7 +153,7 @@ export default function VoiceRecorder({ onRecordingComplete, onCancel }: VoiceRe
             </Pressable>
 
             <TouchableOpacity style={styles.cancelBtn} onPress={onCancel}>
-                <Text style={styles.cancelText}>Cancel</Text>
+                <Text style={[styles.cancelText, { color: Colors.textMuted }]}>Cancel</Text>
             </TouchableOpacity>
         </View>
     );
@@ -161,49 +163,53 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         paddingVertical: Spacing.xl,
-        gap: Spacing.lg },
+        gap: Spacing.lg
+    },
     hint: {
         fontSize: FontSize.sm,
-        color: .textMuted,
-        fontWeight: FontWeight.medium },
+        fontWeight: FontWeight.medium
+    },
     timerRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: Spacing.sm },
+        gap: Spacing.sm
+    },
     recordingDot: {
         width: 8,
         height: 8,
-        borderRadius: 4,
-        backgroundColor: .danger },
+        borderRadius: 4
+    },
     timer: {
         fontSize: FontSize.xl,
         fontWeight: FontWeight.heavy,
-        color: .danger,
-        fontVariant: ['tabular-nums'] },
+        fontVariant: ['tabular-nums']
+    },
     pulseRing: {
         position: 'absolute',
         borderRadius: 100,
-        borderWidth: 2,
-        borderColor: .danger },
+        borderWidth: 2
+    },
     pulseRing1: { width: 110, height: 110, opacity: 0.3 },
     pulseRing2: { width: 140, height: 140 },
     recordBtn: {
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: .danger,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: .danger,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.4,
         shadowRadius: 16,
-        elevation: 10 },
+        elevation: 10
+    },
     recordBtnActive: {
-        backgroundColor: '#B91C1C' },
+        backgroundColor: '#B91C1C'
+    },
     cancelBtn: {
         paddingHorizontal: Spacing.lg,
-        paddingVertical: Spacing.sm },
+        paddingVertical: Spacing.sm
+    },
     cancelText: {
-        fontSize: FontSize.sm,
-        color: .textMuted } });
+        fontSize: FontSize.sm
+    }
+});

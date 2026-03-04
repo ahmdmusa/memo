@@ -5,14 +5,15 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    SectionList } from 'react-native';
+    SectionList
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { RootStackParamList } from '../types/index';
 import { Post } from '../types';
-import {  Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
 import { getAllPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import { useSettings } from '../context/SettingsContext';
@@ -59,7 +60,8 @@ export default function MemoriesScreen({ navigation }: Props) {
             result.push({
                 title: `On this day ${yDiff} year${yDiff > 1 ? 's' : ''} ago`,
                 subtitle: now.format(`MMMM D, ${year}`),
-                data: byYear[yDiff] });
+                data: byYear[yDiff]
+            });
         }
 
         // Random throwback: oldest posts
@@ -70,7 +72,8 @@ export default function MemoriesScreen({ navigation }: Props) {
             result.push({
                 title: '📼 From the beginning',
                 subtitle: 'Your very first memories',
-                data: oldest });
+                data: oldest
+            });
         }
 
         setTotalMemories(all.length);
@@ -81,22 +84,22 @@ export default function MemoriesScreen({ navigation }: Props) {
 
     if (sections.length === 0) {
         return (
-            <View style={[styles.container, styles.empty]}>
+            <View style={[styles.container, styles.empty, { backgroundColor: Colors.bg }]}>
                 <Text style={styles.emptyEmoji}>🕰️</Text>
-                <Text style={styles.emptyTitle}>No time capsules yet</Text>
-                <Text style={styles.emptyBody}>
+                <Text style={[styles.emptyTitle, { color: Colors.textPrimary }]}>No time capsules yet</Text>
+                <Text style={[styles.emptyBody, { color: Colors.textSecondary }]}>
                     Your memories from past years will appear here. Keep journaling every day!
                 </Text>
                 <View style={styles.emptyStats}>
-                    <Text style={styles.emptyStatNum}>{totalMemories}</Text>
-                    <Text style={styles.emptyStatLabel}>total memories so far</Text>
+                    <Text style={[styles.emptyStatNum, { color: Colors.accent }]}>{totalMemories}</Text>
+                    <Text style={[styles.emptyStatLabel, { color: Colors.textMuted }]}>total memories so far</Text>
                 </View>
             </View>
         );
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colors.bg }]}>
             <SectionList
                 sections={sections}
                 keyExtractor={(item) => String(item.id)}
@@ -109,14 +112,14 @@ export default function MemoriesScreen({ navigation }: Props) {
                 )}
                 renderSectionHeader={({ section }) => (
                     <View style={styles.sectionHeader}>
-                        <Text style={styles.sectionTitle}>{section.title}</Text>
-                        <Text style={styles.sectionSub}>{section.subtitle}</Text>
+                        <Text style={[styles.sectionTitle, { color: Colors.accentLight }]}>{section.title}</Text>
+                        <Text style={[styles.sectionSub, { color: Colors.textMuted }]}>{section.subtitle}</Text>
                     </View>
                 )}
                 ListHeaderComponent={
-                    <View style={styles.header}>
-                        <Text style={styles.headerTitle}>Memory Lane</Text>
-                        <Text style={styles.headerSub}>
+                    <View style={[styles.header, { borderBottomColor: Colors.border }]}>
+                        <Text style={[styles.headerTitle, { color: Colors.textPrimary }]}>Memory Lane</Text>
+                        <Text style={[styles.headerSub, { color: Colors.textMuted }]}>
                             {dayjs().format('MMMM D')} · Looking back in time ✨
                         </Text>
                     </View>
@@ -130,39 +133,40 @@ export default function MemoriesScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
+    container: { flex: 1 },
 
     header: {
         paddingTop: 60,
         paddingHorizontal: Spacing.md,
         paddingBottom: Spacing.lg,
         borderBottomWidth: 1,
-        borderBottomColor: .border,
-        marginBottom: Spacing.md },
+        marginBottom: Spacing.md
+    },
     headerTitle: {
         fontSize: FontSize.xxl,
         fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        marginBottom: 4 },
+        marginBottom: 4
+    },
     headerSub: {
-        fontSize: FontSize.sm,
-        color: .textMuted },
+        fontSize: FontSize.sm
+    },
 
     sectionHeader: {
         paddingHorizontal: Spacing.md,
         paddingBottom: Spacing.sm,
-        paddingTop: Spacing.md },
+        paddingTop: Spacing.md
+    },
     sectionTitle: {
         fontSize: FontSize.lg,
         fontWeight: FontWeight.bold,
-        color: .accentLight,
-        marginBottom: 2 },
+        marginBottom: 2
+    },
     sectionSub: {
         fontSize: FontSize.xs,
-        color: .textMuted,
         textTransform: 'uppercase',
         letterSpacing: 0.7,
-        fontWeight: FontWeight.medium },
+        fontWeight: FontWeight.medium
+    },
 
     list: { paddingBottom: 120 },
 
@@ -170,23 +174,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: Spacing.xl,
-        gap: Spacing.md },
+        gap: Spacing.md
+    },
     emptyEmoji: { fontSize: 56 },
     emptyTitle: {
         fontSize: FontSize.xxl,
         fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        textAlign: 'center' },
+        textAlign: 'center'
+    },
     emptyBody: {
         fontSize: FontSize.md,
-        color: .textSecondary,
         textAlign: 'center',
-        lineHeight: 22 },
+        lineHeight: 22
+    },
     emptyStats: { alignItems: 'center', marginTop: Spacing.lg },
     emptyStatNum: {
         fontSize: FontSize.xxxl,
-        fontWeight: FontWeight.heavy,
-        color: .accent },
+        fontWeight: FontWeight.heavy
+    },
     emptyStatLabel: {
-        fontSize: FontSize.sm,
-        color: .textMuted } });
+        fontSize: FontSize.sm
+    }
+});

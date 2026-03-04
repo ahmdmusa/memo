@@ -5,13 +5,14 @@ import {
     StyleSheet,
     FlatList,
     TouchableOpacity,
-    TextInput } from 'react-native';
+    TextInput
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList, PostType } from '../types/index';
 import { Post } from '../types';
-import {  Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
 import { getAllPosts, getPostsByType, searchPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import { useSettings } from '../context/SettingsContext';
@@ -62,14 +63,14 @@ export default function ExploreScreen({ navigation }: Props) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colors.bg }]}>
             {/* Header */}
             <View style={styles.header}>
-                <Text style={styles.title}>Explore</Text>
-                <View style={styles.searchBar}>
+                <Text style={[styles.title, { color: Colors.textPrimary }]}>Explore</Text>
+                <View style={[styles.searchBar, { backgroundColor: Colors.bgCard, borderColor: Colors.border }]}>
                     <Ionicons name="search" size={16} color={Colors.textMuted} />
                     <TextInput
-                        style={styles.searchInput}
+                        style={[styles.searchInput, { color: Colors.textPrimary }]}
                         placeholder="Search memories..."
                         placeholderTextColor={Colors.textMuted}
                         value={query}
@@ -87,19 +88,20 @@ export default function ExploreScreen({ navigation }: Props) {
             <View style={styles.filterRow}>
                 {FILTERS.map((f) => {
                     const active = filter === f.key;
-                    const fColor = f.key === 'all' ? .accent : getPostColor(f.key as PostType);
-                    const fDim = f.key === 'all' ? .accentDim : getPostDim(f.key as PostType);
+                    const fColor = f.key === 'all' ? Colors.accent : getPostColor(Colors, f.key as PostType);
+                    const fDim = f.key === 'all' ? Colors.accentDim : getPostDim(Colors, f.key as PostType);
                     return (
                         <TouchableOpacity
                             key={f.key}
                             style={[
                                 styles.filterBtn,
+                                { borderColor: Colors.border },
                                 active && { backgroundColor: fDim, borderColor: fColor },
                             ]}
                             onPress={() => handleFilter(f.key)}
                         >
-                            <Ionicons name={f.icon} size={14} color={active ? fColor : .textMuted} />
-                            <Text style={[styles.filterText, active && { color: fColor }]}>{f.label}</Text>
+                            <Ionicons name={f.icon} size={14} color={active ? fColor : Colors.textMuted} />
+                            <Text style={[styles.filterText, { color: active ? fColor : Colors.textMuted }]}>{f.label}</Text>
                         </TouchableOpacity>
                     );
                 })}
@@ -107,7 +109,7 @@ export default function ExploreScreen({ navigation }: Props) {
 
             {/* Results count */}
             {posts.length > 0 && (
-                <Text style={styles.resultsCount}>{posts.length} {posts.length === 1 ? 'memory' : 'memories'}</Text>
+                <Text style={[styles.resultsCount, { color: Colors.textMuted }]}>{posts.length} {posts.length === 1 ? 'memory' : 'memories'}</Text>
             )}
 
             <FlatList
@@ -123,7 +125,7 @@ export default function ExploreScreen({ navigation }: Props) {
                 ListEmptyComponent={
                     <View style={styles.empty}>
                         <Ionicons name="search-outline" size={40} color={Colors.textMuted} />
-                        <Text style={styles.emptyText}>
+                        <Text style={[styles.emptyText, { color: Colors.textMuted }]}>
                             {query ? 'No results found' : 'Nothing here yet'}
                         </Text>
                     </View>
@@ -136,35 +138,36 @@ export default function ExploreScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
+    container: { flex: 1 },
     header: {
         paddingTop: 60,
         paddingHorizontal: Spacing.md,
-        paddingBottom: Spacing.md },
+        paddingBottom: Spacing.md
+    },
     title: {
         fontSize: FontSize.xxl,
         fontWeight: FontWeight.heavy,
-        color: .textPrimary,
-        marginBottom: Spacing.md },
+        marginBottom: Spacing.md
+    },
     searchBar: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: Spacing.sm,
-        backgroundColor: .bgCard,
         borderWidth: 1,
-        borderColor: .border,
         borderRadius: Radius.lg,
         paddingHorizontal: Spacing.md,
-        paddingVertical: Spacing.sm + 2 },
+        paddingVertical: Spacing.sm + 2
+    },
     searchInput: {
         flex: 1,
-        fontSize: FontSize.md,
-        color: .textPrimary },
+        fontSize: FontSize.md
+    },
     filterRow: {
         flexDirection: 'row',
         gap: Spacing.sm,
         paddingHorizontal: Spacing.md,
-        marginBottom: Spacing.sm },
+        marginBottom: Spacing.sm
+    },
     filterBtn: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -172,25 +175,27 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing.sm,
         paddingVertical: 6,
         borderRadius: Radius.full,
-        borderWidth: 1,
-        borderColor: .border },
+        borderWidth: 1
+    },
     filterText: {
         fontSize: FontSize.xs,
-        fontWeight: FontWeight.medium,
-        color: .textMuted },
+        fontWeight: FontWeight.medium
+    },
     resultsCount: {
         fontSize: FontSize.xs,
-        color: .textMuted,
         paddingHorizontal: Spacing.md,
         marginBottom: Spacing.sm,
         fontWeight: FontWeight.medium,
         textTransform: 'uppercase',
-        letterSpacing: 0.6 },
+        letterSpacing: 0.6
+    },
     list: { paddingTop: Spacing.sm, paddingBottom: 120 },
     empty: {
         alignItems: 'center',
         paddingTop: 80,
-        gap: Spacing.md },
+        gap: Spacing.md
+    },
     emptyText: {
-        fontSize: FontSize.md,
-        color: .textMuted } });
+        fontSize: FontSize.md
+    }
+});

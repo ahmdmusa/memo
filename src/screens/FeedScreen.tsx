@@ -6,7 +6,8 @@ import {
     FlatList,
     TouchableOpacity,
     RefreshControl,
-    Animated } from 'react-native';
+    Animated
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +15,7 @@ import * as Haptics from 'expo-haptics';
 import dayjs from 'dayjs';
 import { RootStackParamList } from '../types/index';
 import { Post } from '../types';
-import {  Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, FontSize, FontWeight } from '../theme';
 import { getAllPosts, getTodayPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import StoryBar from '../components/StoryBar';
@@ -69,8 +70,8 @@ export default function FeedScreen({ navigation }: Props) {
     const EmptyFeed = () => (
         <View style={styles.emptyContainer}>
             <Text style={styles.emptyEmoji}>✨</Text>
-            <Text style={styles.emptyTitle}>Your space awaits</Text>
-            <Text style={styles.emptyBody}>
+            <Text style={[styles.emptyTitle, { color: Colors.textPrimary }]}>Your space awaits</Text>
+            <Text style={[styles.emptyBody, { color: Colors.textSecondary }]}>
                 Start capturing your thoughts, moments, and stories. This is your private world.
             </Text>
             <View style={styles.emptyActions}>
@@ -81,11 +82,11 @@ export default function FeedScreen({ navigation }: Props) {
                 ].map((item) => (
                     <TouchableOpacity
                         key={item.type}
-                        style={styles.emptyActionBtn}
+                        style={[styles.emptyActionBtn, { backgroundColor: Colors.bgCard, borderColor: Colors.border }]}
                         onPress={() => openCreate(item.type)}
                     >
                         <Ionicons name={item.icon} size={22} color={Colors.accent} />
-                        <Text style={styles.emptyActionText}>{item.label}</Text>
+                        <Text style={[styles.emptyActionText, { color: Colors.textSecondary }]}>{item.label}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
@@ -96,10 +97,10 @@ export default function FeedScreen({ navigation }: Props) {
         <View>
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.greeting}>
+                    <Text style={[styles.greeting, { color: Colors.textMuted }]}>
                         {dayjs().hour() < 12 ? 'Good morning' : dayjs().hour() < 18 ? 'Good afternoon' : 'Good evening'} 👋
                     </Text>
-                    <Text style={styles.headerTitle}>My Journal</Text>
+                    <Text style={[styles.headerTitle, { color: Colors.textPrimary }]}>My Journal</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.headerIconBtn}
@@ -118,7 +119,7 @@ export default function FeedScreen({ navigation }: Props) {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colors.bg }]}>
             <FlatList
                 data={posts}
                 keyExtractor={(item) => String(item.id)}
@@ -144,7 +145,7 @@ export default function FeedScreen({ navigation }: Props) {
 
             {/* FAB */}
             <Animated.View style={[styles.fabWrapper, { transform: [{ scale: fabAnim }] }]}>
-                <TouchableOpacity style={styles.fab} onPress={handleFabPress} activeOpacity={0.9}>
+                <TouchableOpacity style={[styles.fab, { backgroundColor: Colors.accent, shadowColor: Colors.accent }]} onPress={handleFabPress} activeOpacity={0.9}>
                     <Ionicons name="add" size={28} color={Colors.white} />
                 </TouchableOpacity>
             </Animated.View>
@@ -153,7 +154,7 @@ export default function FeedScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: .bg },
+    container: { flex: 1 },
     list: { paddingTop: Spacing.sm, paddingBottom: 100 },
     emptyList: { flexGrow: 1 },
 
@@ -163,71 +164,75 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: Spacing.md,
         paddingTop: Spacing.xl,
-        paddingBottom: Spacing.md },
+        paddingBottom: Spacing.md
+    },
     greeting: {
         fontSize: FontSize.sm,
-        color: .textMuted,
         fontWeight: FontWeight.medium,
-        marginBottom: 2 },
+        marginBottom: 2
+    },
     headerTitle: {
         fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
-        color: .textPrimary },
+        fontWeight: FontWeight.heavy
+    },
     headerIconBtn: {
         width: 44,
         height: 44,
         alignItems: 'center',
-        justifyContent: 'center' },
+        justifyContent: 'center'
+    },
 
     emptyContainer: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: Spacing.xl,
-        paddingTop: Spacing.xxl },
+        paddingTop: Spacing.xxl
+    },
     emptyEmoji: { fontSize: 56, marginBottom: Spacing.md },
     emptyTitle: {
         fontSize: FontSize.xxl,
         fontWeight: FontWeight.heavy,
-        color: .textPrimary,
         marginBottom: Spacing.sm,
-        textAlign: 'center' },
+        textAlign: 'center'
+    },
     emptyBody: {
         fontSize: FontSize.md,
-        color: .textSecondary,
         textAlign: 'center',
         lineHeight: 22,
-        marginBottom: Spacing.xl },
+        marginBottom: Spacing.xl
+    },
     emptyActions: {
         flexDirection: 'row',
-        gap: Spacing.md },
+        gap: Spacing.md
+    },
     emptyActionBtn: {
         alignItems: 'center',
         gap: Spacing.xs,
-        backgroundColor: .bgCard,
         borderWidth: 1,
-        borderColor: .border,
         borderRadius: Radius.md,
         paddingVertical: Spacing.md,
-        paddingHorizontal: Spacing.lg },
+        paddingHorizontal: Spacing.lg
+    },
     emptyActionText: {
         fontSize: FontSize.sm,
-        color: .textSecondary,
-        fontWeight: FontWeight.medium },
+        fontWeight: FontWeight.medium
+    },
 
     fabWrapper: {
         position: 'absolute',
         bottom: 28,
-        alignSelf: 'center' },
+        alignSelf: 'center'
+    },
     fab: {
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: .accent,
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: .accent,
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.45,
         shadowRadius: 16,
-        elevation: 12 } });
+        elevation: 12
+    }
+});
