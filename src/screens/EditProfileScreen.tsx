@@ -17,7 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
 import { RootStackParamList } from '../types/index';
-import { Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, Typography } from '../theme';
 import { getProfile, saveProfile, saveImageLocally } from '../db/database';
 import { useSettings } from '../context/SettingsContext';
 
@@ -138,13 +138,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     navBtn: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-    headerTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold },
+    headerTitle: { fontSize: Typography.bodyLarge.fontSize, fontWeight: '700' },
     saveBtn: {
         paddingHorizontal: Spacing.md,
         paddingVertical: Spacing.sm,
         borderRadius: Radius.full
     },
-    saveBtnText: { fontSize: FontSize.sm, fontWeight: FontWeight.bold },
+    saveBtnText: { fontSize: Typography.bodySmall.fontSize, fontWeight: '700' },
     scroll: { padding: Spacing.md },
     avatarSection: { alignItems: 'center', marginBottom: Spacing.xl },
     avatar: { width: 90, height: 90, borderRadius: 45, borderWidth: 3 },
@@ -156,26 +156,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    avatarLetter: { fontSize: 36, fontWeight: FontWeight.heavy },
+    avatarLetter: { fontSize: 36, fontWeight: '800' },
     changeAvatarText: {
         marginTop: Spacing.sm,
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.medium
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '500'
     },
     field: { marginBottom: Spacing.lg },
     fieldLabel: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '600',
         textTransform: 'uppercase',
         letterSpacing: 0.8,
         marginBottom: Spacing.sm
     },
     fieldInput: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         borderWidth: 1,
         borderRadius: Radius.md,
         padding: Spacing.md
     },
     bioInput: { minHeight: 100, textAlignVertical: 'top', paddingTop: Spacing.md },
-    charCount: { fontSize: FontSize.xs, marginTop: 4, alignSelf: 'flex-end' }
+    charCount: { fontSize: Typography.labelSmall.fontSize, marginTop: 4, alignSelf: 'flex-end' }
 });

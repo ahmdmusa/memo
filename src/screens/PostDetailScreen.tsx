@@ -10,6 +10,8 @@ import {
     Share,
     Alert
 } from 'react-native';
+import RenderHtml from 'react-native-render-html';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,8 +19,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import dayjs from 'dayjs';
 import { RootStackParamList } from '../types/index';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { deletePost } from '../db/database';
+import AudioPlayerCard from '../components/AudioPlayerCard';
 import { useSettings } from '../context/SettingsContext';
 
 type Props = {
@@ -41,6 +44,29 @@ export default function PostDetailScreen({ navigation, route }: Props) {
     const insets = useSafeAreaInsets();
     const color = getPostColor(Colors, post.type);
     const dim = getPostDim(Colors, post.type);
+
+    const videoPlayer = useVideoPlayer(post.media_uri ?? null, p => {
+        p.loop = true;
+    });
+
+    const isThought = post.type === 'thought';
+    const baseFontSize = isThought ? Typography.titleLarge.fontSize : Typography.bodyMedium.fontSize;
+
+    const htmlStyles = {
+        body: {
+            fontSize: baseFontSize,
+            lineHeight: isThought ? 32 : 26,
+            fontStyle: isThought ? 'italic' : 'normal',
+            color: isThought ? Colors.textPrimary : Colors.textSecondary,
+            textAlign: isThought ? 'center' : 'left',
+            margin: 0,
+            padding: 0
+        },
+        p: {
+            margin: 0,
+            padding: 0
+        }
+    };
 
     const handleDelete = () => {
         Alert.alert(
@@ -85,6 +111,27 @@ export default function PostDetailScreen({ navigation, route }: Props) {
                     />
                 )}
 
+                {/* Video */}
+                {post.type === 'video' && post.media_uri && (
+                    <View style={[styles.fullImage, { backgroundColor: Colors.bgHighlight }]}>
+                        <VideoView
+                            player={videoPlayer}
+                            style={StyleSheet.absoluteFillObject}
+                            nativeControls={true}
+                        />
+                    </View>
+                )}
+
+                {/* Voice */}
+                {post.type === 'voice' && (post.media_uri || post.image_uri) && (
+                    <View style={{ padding: Spacing.md }}>
+                        <AudioPlayerCard
+                            uri={post.media_uri ?? post.image_uri ?? ''}
+                            duration={(post.duration ?? 0) * 1000}
+                        />
+                    </View>
+                )}
+
                 <View style={styles.content}>
                     {/* Mood & Date */}
                     <View style={styles.meta}>
@@ -104,14 +151,14 @@ export default function PostDetailScreen({ navigation, route }: Props) {
 
                     {/* Body */}
                     {post.body && (
-                        <Text style={[
-                            styles.body,
-                            { color: Colors.textSecondary },
-                            post.type === 'thought' && styles.bodyThought,
-                            post.type === 'thought' && { color: Colors.textPrimary }
-                        ]}>
-                            {post.body}
-                        </Text>
+                        <View style={{ marginBottom: Spacing.xl }}>
+                            <RenderHtml
+                                contentWidth={SCREEN_W - Spacing.md * 2}
+                                source={{ html: post.body }}
+                                baseStyle={htmlStyles.body as any}
+                                tagsStyles={htmlStyles as any}
+                            />
+                        </View>
                     )}
 
                     {/* Accent line */}
@@ -147,8 +194,8 @@ const styles = StyleSheet.create({
         borderRadius: Radius.full
     },
     typePillText: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.semibold
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '600'
     },
     scroll: { paddingBottom: 80 },
     fullImage: {
@@ -159,29 +206,18 @@ const styles = StyleSheet.create({
     meta: { marginBottom: Spacing.md },
     mood: { fontSize: 36, marginBottom: Spacing.xs },
     metaDate: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.bodyLarge.fontSize,
+        fontWeight: '600',
         marginBottom: 2
     },
     metaTime: {
-        fontSize: FontSize.sm
+        fontSize: Typography.bodySmall.fontSize
     },
     title: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800',
         lineHeight: 34,
         marginBottom: Spacing.md
-    },
-    body: {
-        fontSize: FontSize.md,
-        lineHeight: 26,
-        marginBottom: Spacing.xl
-    },
-    bodyThought: {
-        fontSize: FontSize.xl,
-        fontStyle: 'italic',
-        lineHeight: 30,
-        textAlign: 'center'
     },
     accentBar: {
         height: 4,

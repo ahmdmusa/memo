@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import dayjs from 'dayjs';
 import { RootStackParamList, Post, Profile } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor } from '../theme';
+import { Spacing, Radius, Typography, getPostColor } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 import {
     getProfile, saveProfile, getAllPosts, saveImageLocally
@@ -64,7 +64,7 @@ export default function ProfileScreen({ navigation }: Props) {
             onPress={() => (navigation as any).navigate('PostDetail', { post })}
         >
             <View style={styles.postAvatarPlaceholder}>
-                <Text style={{ color: Colors.white, fontWeight: FontWeight.bold }}>
+                <Text style={{ color: Colors.white, fontWeight: '700' }}>
                     {profile.name.charAt(0)}
                 </Text>
             </View>
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     },
     avatarLetter: {
         fontSize: 32,
-        fontWeight: FontWeight.bold,
+        fontWeight: '700',
     },
     actionButtons: {
         flexDirection: 'row',
@@ -229,16 +229,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     actionBtnText: {
-        fontSize: FontSize.md,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyMedium.fontSize,
+        fontWeight: '700',
     },
     nameText: {
         fontSize: 22,
-        fontWeight: FontWeight.heavy,
+        fontWeight: '800',
         marginBottom: 6,
     },
     bioText: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         marginBottom: Spacing.sm,
     },
     statsRow: {
@@ -247,11 +247,11 @@ const styles = StyleSheet.create({
         marginTop: Spacing.sm,
     },
     statValue: {
-        fontWeight: FontWeight.bold,
-        fontSize: FontSize.md,
+        fontWeight: '700',
+        fontSize: Typography.bodyMedium.fontSize,
     },
     statLabel: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
     },
     tabBar: {
         flexDirection: 'row',
@@ -264,8 +264,8 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     tabText: {
-        fontWeight: FontWeight.bold,
-        fontSize: FontSize.md,
+        fontWeight: '700',
+        fontSize: Typography.bodyMedium.fontSize,
     },
     activeTabIndicator: {
         position: 'absolute',
@@ -300,20 +300,20 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     postAuthor: {
-        fontWeight: FontWeight.bold,
-        fontSize: FontSize.md,
+        fontWeight: '700',
+        fontSize: Typography.bodyMedium.fontSize,
     },
     postDate: {
-        fontSize: FontSize.sm,
+        fontSize: Typography.bodySmall.fontSize,
         marginLeft: 4,
     },
     postTitle: {
-        fontWeight: FontWeight.bold,
-        fontSize: FontSize.md,
+        fontWeight: '700',
+        fontSize: Typography.bodyMedium.fontSize,
         marginBottom: 4,
     },
     postBodyText: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         lineHeight: 20,
         marginBottom: Spacing.sm,
     },

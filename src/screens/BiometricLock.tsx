@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { Ionicons } from '@expo/vector-icons';
-import { Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, Typography } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface BiometricLockProps {
@@ -51,7 +51,7 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
         pulse();
         try {
             const result = await LocalAuthentication.authenticateAsync({
-                promptMessage: 'Unlock Private Garden',
+                promptMessage: 'Unlock Memo',
                 fallbackLabel: 'Use Passcode',
                 cancelLabel: 'Cancel',
                 disableDeviceFallback: false
@@ -104,14 +104,14 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
             justifyContent: 'center'
         },
         title: {
-            fontSize: FontSize.xxxl,
-            fontWeight: FontWeight.heavy,
+            fontSize: Typography.headlineLarge.fontSize,
+            fontWeight: '800',
             color: Colors.textPrimary,
             marginBottom: Spacing.sm,
             textAlign: 'center'
         },
         subtitle: {
-            fontSize: FontSize.sm,
+            fontSize: Typography.bodySmall.fontSize,
             color: Colors.textMuted,
             textAlign: 'center',
             marginBottom: Spacing.xl
@@ -129,7 +129,7 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
             marginBottom: Spacing.md
         },
         errorText: {
-            fontSize: FontSize.sm,
+            fontSize: Typography.bodySmall.fontSize,
             color: Colors.danger
         },
         unlockBtn: {
@@ -147,8 +147,8 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
             elevation: 10
         },
         unlockText: {
-            fontSize: FontSize.md,
-            fontWeight: FontWeight.bold,
+            fontSize: Typography.bodyMedium.fontSize,
+            fontWeight: '700',
             color: Colors.white
         }
     });
@@ -165,7 +165,7 @@ export default function BiometricLock({ onUnlocked }: BiometricLockProps) {
                     </Animated.View>
                 </View>
 
-                <Text style={styles.title}>Private Garden</Text>
+                <Text style={styles.title}>Memo</Text>
                 <Text style={styles.subtitle}>Your private space · Unlock to enter</Text>
 
                 {error ? (

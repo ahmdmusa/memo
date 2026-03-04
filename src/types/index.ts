@@ -2,9 +2,12 @@ export type PostType = 'photo' | 'thought' | 'article' | 'voice' | 'video';
 
 export type Mood = '😊' | '😔' | '😤' | '🥱' | '🤔' | '❤️' | '🔥' | '✨' | '😂' | '😌';
 
+export type CognitiveMode = 'free' | 'reflection' | 'decision' | 'technical';
+
 export interface Post {
     id: number;
     type: PostType;
+    cognitive_mode?: CognitiveMode;
     title?: string;
     body?: string;
     // image / voice file path
@@ -15,6 +18,8 @@ export interface Post {
     mood?: Mood;
     mood_tag?: string;
     location_metadata?: string;
+    is_actionable?: boolean;
+    action_status?: 'pending' | 'resolved';
     created_at: string;
     updated_at: string;
 }
@@ -38,7 +43,7 @@ export type RootStackParamList = {
 
 export type MainTabParamList = {
     Feed: undefined;
-    Explore: undefined;
+    Insights: undefined;
     Memories: undefined;
     Profile: undefined;
 };

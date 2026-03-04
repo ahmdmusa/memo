@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appearance, ColorSchemeName } from 'react-native';
 import { getThemeColors, AppColors } from '../theme/colors';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
+import { MD3DarkTheme, MD3LightTheme, MD3Theme } from 'react-native-paper';
 
 export type ThemeMode = 'system' | 'light' | 'dark' | 'deep_black';
 
@@ -14,6 +16,7 @@ interface SettingsState {
 
 interface SettingsContextType extends SettingsState {
     colors: AppColors;
+    paperTheme: MD3Theme;
     setThemeMode: (mode: ThemeMode) => void;
     setAccentColor: (color: string) => void;
     setLanguage: (lang: string) => void;
@@ -36,6 +39,8 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [systemColorScheme, setSystemColorScheme] = useState<ColorSchemeName>(Appearance.getColorScheme() || 'light');
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const { theme, updateTheme } = useMaterial3Theme({ fallbackSourceColor: settings.accentColor });
+
     useEffect(() => {
         const loadSettings = async () => {
             try {
@@ -57,6 +62,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         return () => subscription.remove();
     }, []);
 
+    useEffect(() => {
+        if (isLoaded) {
+            updateTheme(settings.accentColor);
+        }
+    }, [settings.accentColor, isLoaded, updateTheme]);
+
     const updateSetting = async <K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
         const newSettings = { ...settings, [key]: value };
         setSettings(newSettings);
@@ -72,7 +83,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         settings.themeMode === 'dark' ||
         (settings.themeMode === 'system' && systemColorScheme === 'dark');
 
-    const colors = getThemeColors(isDark, settings.themeMode === 'deep_black', settings.accentColor);
+    const m3Colors = isDark ? theme.dark : theme.light;
+    const colors = getThemeColors(isDark, settings.themeMode === 'deep_black', m3Colors);
+
+    const paperTheme = isDark
+        ? { ...MD3DarkTheme, colors: settings.themeMode === 'deep_black' ? { ...theme.dark, background: '#000000', surface: '#000000', surfaceContainer: '#121212' } : theme.dark }
+        : { ...MD3LightTheme, colors: theme.light };
 
     if (!isLoaded) return null;
 
@@ -81,6 +97,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             value={{
                 ...settings,
                 colors,
+                paperTheme,
                 setThemeMode: (mode) => updateSetting('themeMode', mode),
                 setAccentColor: (color) => updateSetting('accentColor', color),
                 setLanguage: (lang) => updateSetting('language', lang),

@@ -18,22 +18,22 @@ export const Radius = {
     full: 9999,
 };
 
-export const FontSize = {
-    xs: 11,
-    sm: 13,
-    md: 15,
-    lg: 17,
-    xl: 20,
-    xxl: 26,
-    xxxl: 34,
-};
-
-export const FontWeight = {
-    regular: '400' as const,
-    medium: '500' as const,
-    semibold: '600' as const,
-    bold: '700' as const,
-    heavy: '800' as const,
+export const Typography = {
+    displayLarge: { fontSize: 57, lineHeight: 64, letterSpacing: 0 },
+    displayMedium: { fontSize: 45, lineHeight: 52, letterSpacing: 0 },
+    displaySmall: { fontSize: 36, lineHeight: 44, letterSpacing: 0 },
+    headlineLarge: { fontSize: 32, lineHeight: 40, letterSpacing: 0 },
+    headlineMedium: { fontSize: 28, lineHeight: 36, letterSpacing: 0 },
+    headlineSmall: { fontSize: 24, lineHeight: 32, letterSpacing: 0 },
+    titleLarge: { fontSize: 22, lineHeight: 28, letterSpacing: 0, fontWeight: '400' as const },
+    titleMedium: { fontSize: 16, lineHeight: 24, letterSpacing: 0.15, fontWeight: '500' as const },
+    titleSmall: { fontSize: 14, lineHeight: 20, letterSpacing: 0.1, fontWeight: '500' as const },
+    bodyLarge: { fontSize: 16, lineHeight: 24, letterSpacing: 0.15, fontWeight: '400' as const },
+    bodyMedium: { fontSize: 14, lineHeight: 20, letterSpacing: 0.25, fontWeight: '400' as const },
+    bodySmall: { fontSize: 12, lineHeight: 16, letterSpacing: 0.4, fontWeight: '400' as const },
+    labelLarge: { fontSize: 14, lineHeight: 20, letterSpacing: 0.1, fontWeight: '500' as const },
+    labelMedium: { fontSize: 12, lineHeight: 16, letterSpacing: 0.5, fontWeight: '500' as const },
+    labelSmall: { fontSize: 11, lineHeight: 16, letterSpacing: 0.5, fontWeight: '500' as const },
 };
 
 export function getPostColor(Colors: AppColors, type: string) {

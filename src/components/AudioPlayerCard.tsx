@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import { Ionicons } from '@expo/vector-icons';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface AudioPlayerCardProps {
@@ -210,10 +210,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     timeText: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.bold
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '700'
     },
     timeMuted: {
-        fontSize: FontSize.xs
+        fontSize: Typography.labelSmall.fontSize
     }
 });

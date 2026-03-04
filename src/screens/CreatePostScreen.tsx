@@ -10,8 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import * as Haptics from 'expo-haptics';
-import { RootStackParamList, PostType, Mood } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { RootStackParamList, PostType, Mood, CognitiveMode } from '../types';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { createPost, saveImageLocally } from '../db/database';
 import VoiceRecorder from '../components/VoiceRecorder';
 import { useSettings } from '../context/SettingsContext';
@@ -46,12 +46,34 @@ export default function CreatePostScreen({ navigation, route }: Props) {
     const [mediaUri, setMediaUri] = useState<string | null>(null);
     const [voiceDurationMs, setVoiceDurationMs] = useState(0);
     const [mood, setMood] = useState<Mood | null>(null);
+    const [cognitiveMode, setCognitiveMode] = useState<CognitiveMode>('free');
     const [saving, setSaving] = useState(false);
 
     const richText = useRef<RichEditor>(null);
 
     const color = getPostColor(Colors, selectedType);
     const dim = getPostDim(Colors, selectedType);
+
+    const applyCognitiveMode = (mode: CognitiveMode) => {
+        Haptics.selectionAsync();
+        setCognitiveMode(mode);
+        if (mode === 'free') {
+            richText.current?.setContentHTML('');
+            setBody('');
+        } else if (mode === 'reflection') {
+            const template = `<div><b>What happened</b></div><div><br></div><div><br></div><div><b>What I felt</b></div><div><br></div><div><br></div><div><b>What I learned</b></div><div><br></div><div><br></div><div><b>What I'll do differently</b></div><div><br></div>`;
+            richText.current?.setContentHTML(template);
+            setBody(template);
+        } else if (mode === 'decision') {
+            const template = `<div><b>Context</b></div><div><br></div><div><br></div><div><b>Options considered</b></div><div><br></div><div><br></div><div><b>Chosen path</b></div><div><br></div><div><br></div><div><b>Expected outcome</b></div><div><br></div>`;
+            richText.current?.setContentHTML(template);
+            setBody(template);
+        } else if (mode === 'technical') {
+            const template = `<div><b>Problem</b></div><div><br></div><div><br></div><div><b>Root cause</b></div><div><br></div><div><br></div><div><b>Fix</b></div><div><br></div><div><br></div><div><b>Lessons</b></div><div><br></div>`;
+            richText.current?.setContentHTML(template);
+            setBody(template);
+        }
+    };
 
     const handleMediaSelection = async (useCamera: boolean) => {
         const options: ImagePicker.ImagePickerOptions = {
@@ -111,8 +133,16 @@ export default function CreatePostScreen({ navigation, route }: Props) {
 
             const postMediaType = selectedType === 'video' || selectedType === 'voice';
 
+            // Lightweight Action Extraction
+            const actionRegex = /\b(will|need to|must|should|going to|plan to|todo|to-do)\b/i;
+            const textContent = body.replace(/<[^>]*>?/gm, ' ');
+            const isActionable = actionRegex.test(textContent);
+
             await createPost({
                 type: selectedType,
+                cognitive_mode: cognitiveMode,
+                is_actionable: isActionable,
+                action_status: isActionable ? 'pending' : undefined,
                 title: title.trim() || undefined,
                 body: body.trim() || undefined,
                 image_uri: !postMediaType ? savedUri : undefined,
@@ -194,6 +224,34 @@ export default function CreatePostScreen({ navigation, route }: Props) {
                     })}
                 </View>
 
+                {/* Cognitive Mode Selector (Only for text-heavy posts) */}
+                {['thought', 'article'].includes(selectedType) && (
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.cognitiveScroll} contentContainerStyle={styles.cognitiveContent}>
+                        {[
+                            { id: 'free' as CognitiveMode, label: 'Free' },
+                            { id: 'reflection' as CognitiveMode, label: 'Reflection' },
+                            { id: 'decision' as CognitiveMode, label: 'Decision Log' },
+                            { id: 'technical' as CognitiveMode, label: 'Technical' },
+                        ].map((mode) => {
+                            const active = cognitiveMode === mode.id;
+                            return (
+                                <TouchableOpacity
+                                    key={mode.id}
+                                    style={[
+                                        styles.cognitivePill,
+                                        { backgroundColor: active ? Colors.accentDim : Colors.bgCard, borderColor: active ? Colors.accent : Colors.borderLight }
+                                    ]}
+                                    onPress={() => applyCognitiveMode(mode.id)}
+                                >
+                                    <Text style={[styles.cognitivePillText, { color: active ? Colors.accent : Colors.textSecondary }]}>
+                                        {mode.label}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </ScrollView>
+                )}
+
                 {/* Mood Selector line */}
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.moodScroll} contentContainerStyle={styles.moodContent}>
                     <TouchableOpacity
@@ -227,7 +285,6 @@ export default function CreatePostScreen({ navigation, route }: Props) {
                                     placeholderTextColor={Colors.textMuted}
                                     value={title}
                                     onChangeText={setTitle}
-                                    autoFocus={true}
                                 />
                             )}
                             <View style={[styles.richTextContainer, { borderColor: Colors.border }]}>
@@ -348,11 +405,11 @@ const styles = StyleSheet.create({
         padding: Spacing.xs,
     },
     cancelText: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
     },
     headerTitle: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyLarge.fontSize,
+        fontWeight: '700',
     },
     saveBtn: {
         paddingHorizontal: Spacing.md,
@@ -360,8 +417,8 @@ const styles = StyleSheet.create({
         borderRadius: Radius.full,
     },
     saveText: {
-        fontSize: FontSize.md,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyMedium.fontSize,
+        fontWeight: '700',
     },
     scroll: {
         flexGrow: 1,
@@ -384,6 +441,25 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         marginHorizontal: 2,
         borderWidth: 1,
+    },
+    cognitiveScroll: {
+        marginTop: Spacing.md,
+    },
+    cognitiveContent: {
+        paddingHorizontal: Spacing.md,
+        gap: Spacing.sm,
+    },
+    cognitivePill: {
+        paddingHorizontal: Spacing.lg,
+        paddingVertical: 8,
+        borderRadius: Radius.full,
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cognitivePillText: {
+        fontSize: Typography.labelMedium.fontSize,
+        fontWeight: '600',
     },
     moodScroll: {
         marginTop: Spacing.md,
@@ -409,8 +485,8 @@ const styles = StyleSheet.create({
         marginTop: Spacing.md,
     },
     titleInput: {
-        fontSize: FontSize.xl,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.titleLarge.fontSize,
+        fontWeight: '700',
         paddingVertical: Spacing.sm,
         borderBottomWidth: StyleSheet.hairlineWidth,
         marginBottom: Spacing.sm,
@@ -445,8 +521,8 @@ const styles = StyleSheet.create({
     },
     addMediaText: {
         marginTop: 6,
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.medium,
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '500',
     },
     mediaPreviewWrapper: {
         width: '100%',
@@ -485,7 +561,7 @@ const styles = StyleSheet.create({
         paddingVertical: Spacing.xl,
     },
     markdownHint: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
         textAlign: 'center',
         marginTop: Spacing.xl,
     }

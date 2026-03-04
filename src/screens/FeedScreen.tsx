@@ -1,13 +1,15 @@
 import React, { useState, useCallback, useRef } from 'react';
+import { FAB } from 'react-native-paper';
 import {
     View,
     Text,
     StyleSheet,
-    FlatList,
     TouchableOpacity,
     RefreshControl,
-    Animated
+    Animated,
+    ScrollView
 } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
 import { useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +17,7 @@ import * as Haptics from 'expo-haptics';
 import dayjs from 'dayjs';
 import { RootStackParamList } from '../types/index';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, Typography } from '../theme';
 import { getAllPosts, getTodayPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import StoryBar from '../components/StoryBar';
@@ -32,6 +34,7 @@ export default function FeedScreen({ navigation }: Props) {
 
     const [posts, setPosts] = useState<Post[]>([]);
     const [todayPosts, setTodayPosts] = useState<Post[]>([]);
+    const [actionablePosts, setActionablePosts] = useState<Post[]>([]);
     const [refreshing, setRefreshing] = useState(false);
     const fabAnim = useRef(new Animated.Value(1)).current;
 
@@ -39,6 +42,12 @@ export default function FeedScreen({ navigation }: Props) {
         const [all, today] = await Promise.all([getAllPosts(), getTodayPosts()]);
         setPosts(all);
         setTodayPosts(today);
+
+        const actionable = all.filter(p =>
+            (p.is_actionable && p.action_status === 'pending') ||
+            (p.cognitive_mode === 'decision')
+        ).slice(0, 5);
+        setActionablePosts(actionable);
     }, []);
 
     useFocusEffect(
@@ -109,6 +118,33 @@ export default function FeedScreen({ navigation }: Props) {
                     <Ionicons name="person-circle-outline" size={30} color={Colors.accentLight} />
                 </TouchableOpacity>
             </View>
+            {actionablePosts.length > 0 && (
+                <View style={styles.recallWidget}>
+                    <View style={styles.recallHeader}>
+                        <Ionicons name="flash" size={16} color={Colors.accent} />
+                        <Text style={[styles.recallTitle, { color: Colors.textPrimary }]}>Intelligent Recall</Text>
+                    </View>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.recallScroll}>
+                        {actionablePosts.map(p => (
+                            <TouchableOpacity
+                                key={p.id}
+                                style={[styles.recallCard, { backgroundColor: Colors.bgCard, borderColor: Colors.borderLight }]}
+                                onPress={() => (navigation as any).navigate('PostDetail', { post: p })}
+                            >
+                                <View style={[styles.recallBadge, { backgroundColor: p.cognitive_mode === 'decision' ? Colors.accentDim : 'rgba(239,68,68,0.1)' }]}>
+                                    <Text style={[styles.recallBadgeText, { color: p.cognitive_mode === 'decision' ? Colors.accent : Colors.danger }]}>
+                                        {p.cognitive_mode === 'decision' ? 'Decision Context' : 'Action Required'}
+                                    </Text>
+                                </View>
+                                <Text style={[styles.recallContext, { color: Colors.textSecondary }]} numberOfLines={2}>
+                                    {p.title || p.body?.replace(/<[^>]*>?/gm, '').trim() || 'Untitled Entry'}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
+            )}
+
             {todayPosts.length > 0 && (
                 <StoryBar
                     posts={todayPosts}
@@ -120,7 +156,7 @@ export default function FeedScreen({ navigation }: Props) {
 
     return (
         <View style={[styles.container, { backgroundColor: Colors.bg }]}>
-            <FlatList
+            <FlashList
                 data={posts}
                 keyExtractor={(item) => String(item.id)}
                 renderItem={({ item }) => (
@@ -141,14 +177,18 @@ export default function FeedScreen({ navigation }: Props) {
                     />
                 }
                 showsVerticalScrollIndicator={false}
+                // @ts-ignore: Known TypeScript definition issue with FlashList in some RN versions
+                estimatedItemSize={250}
             />
 
-            {/* FAB */}
-            <Animated.View style={[styles.fabWrapper, { transform: [{ scale: fabAnim }] }]}>
-                <TouchableOpacity style={[styles.fab, { backgroundColor: Colors.accent, shadowColor: Colors.accent }]} onPress={handleFabPress} activeOpacity={0.9}>
-                    <Ionicons name="add" size={28} color={Colors.white} />
-                </TouchableOpacity>
-            </Animated.View>
+            {/* Material 3 FAB */}
+            <FAB
+                icon="plus"
+                style={[styles.fab, { backgroundColor: Colors.accent }]}
+                color={Colors.white}
+                onPress={handleFabPress}
+                mode="elevated"
+            />
         </View>
     );
 }
@@ -167,13 +207,13 @@ const styles = StyleSheet.create({
         paddingBottom: Spacing.md
     },
     greeting: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.medium,
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '500',
         marginBottom: 2
     },
     headerTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800'
     },
     headerIconBtn: {
         width: 44,
@@ -191,13 +231,13 @@ const styles = StyleSheet.create({
     },
     emptyEmoji: { fontSize: 56, marginBottom: Spacing.md },
     emptyTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800',
         marginBottom: Spacing.sm,
         textAlign: 'center'
     },
     emptyBody: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         textAlign: 'center',
         lineHeight: 22,
         marginBottom: Spacing.xl
@@ -215,24 +255,56 @@ const styles = StyleSheet.create({
         paddingHorizontal: Spacing.lg
     },
     emptyActionText: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.medium
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '500'
     },
 
-    fabWrapper: {
+    fab: {
         position: 'absolute',
         bottom: 28,
-        alignSelf: 'center'
+        right: Spacing.md,
     },
-    fab: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
+    recallWidget: {
+        marginTop: Spacing.md,
+        marginBottom: Spacing.sm
+    },
+    recallHeader: {
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.45,
-        shadowRadius: 16,
-        elevation: 12
+        paddingHorizontal: Spacing.md,
+        gap: Spacing.xs,
+        marginBottom: Spacing.sm
+    },
+    recallTitle: {
+        fontSize: Typography.labelLarge.fontSize,
+        fontWeight: '700',
+        letterSpacing: 0.5,
+        textTransform: 'uppercase'
+    },
+    recallScroll: {
+        paddingHorizontal: Spacing.md,
+        gap: Spacing.sm
+    },
+    recallCard: {
+        width: 220,
+        padding: Spacing.md,
+        borderRadius: Radius.md,
+        borderWidth: 1
+    },
+    recallBadge: {
+        alignSelf: 'flex-start',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: Radius.sm,
+        marginBottom: Spacing.sm
+    },
+    recallBadgeText: {
+        fontSize: 10,
+        fontWeight: '700',
+        textTransform: 'uppercase'
+    },
+    recallContext: {
+        fontSize: Typography.bodyMedium.fontSize,
+        lineHeight: 20
     }
 });

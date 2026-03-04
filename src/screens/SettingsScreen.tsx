@@ -6,7 +6,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import { useSettings, ThemeMode } from '../context/SettingsContext';
-import { FontSize, FontWeight, Radius, Spacing } from '../theme';
+import { Typography, Radius, Spacing } from '../theme';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 import { exportVault, importVault } from '../utils/vault';
@@ -171,6 +171,33 @@ export default function SettingsScreen({ navigation }: Props) {
                     </View>
                 ))}
 
+                {/* Privacy Dashboard */}
+                {renderSection('Privacy Dashboard', (
+                    <View style={styles.privacyContainer}>
+                        <View style={styles.privacyItem}>
+                            <Ionicons name="cloud-offline-outline" size={24} color={Colors.accent} />
+                            <View style={styles.privacyTextContent}>
+                                <Text style={[styles.privacyItemTitle, { color: Colors.textPrimary }]}>100% Offline First</Text>
+                                <Text style={[styles.privacyItemDesc, { color: Colors.textSecondary }]}>Your memory engine runs entirely on your device. No cloud sync, no tracking.</Text>
+                            </View>
+                        </View>
+                        <View style={[styles.privacyItem, { borderTopWidth: 1, borderTopColor: Colors.borderLight }]}>
+                            <Ionicons name="shield-checkmark-outline" size={24} color={Colors.accent} />
+                            <View style={styles.privacyTextContent}>
+                                <Text style={[styles.privacyItemTitle, { color: Colors.textPrimary }]}>Zero Telemetry</Text>
+                                <Text style={[styles.privacyItemDesc, { color: Colors.textSecondary }]}>No product analytics, crashlytics, or background data collection. Period.</Text>
+                            </View>
+                        </View>
+                        <View style={[styles.privacyItem, { borderTopWidth: 1, borderTopColor: Colors.borderLight }]}>
+                            <Ionicons name="hardware-chip-outline" size={24} color={Colors.accent} />
+                            <View style={styles.privacyTextContent}>
+                                <Text style={[styles.privacyItemTitle, { color: Colors.textPrimary }]}>Local Intelligence</Text>
+                                <Text style={[styles.privacyItemDesc, { color: Colors.textSecondary }]}>Insights and pattern correlations are computed dynamically using edge processing.</Text>
+                            </View>
+                        </View>
+                    </View>
+                ))}
+
                 {/* The Vault */}
                 {renderSection('The Vault (Data)', (
                     <View>
@@ -256,8 +283,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerTitle: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.bodyLarge.fontSize,
+        fontWeight: '600',
     },
     scrollContent: {
         padding: Spacing.md,
@@ -266,8 +293,8 @@ const styles = StyleSheet.create({
         marginBottom: Spacing.xl,
     },
     sectionTitle: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '600',
         textTransform: 'uppercase',
         marginBottom: Spacing.sm,
         marginLeft: Spacing.xs,
@@ -288,11 +315,11 @@ const styles = StyleSheet.create({
     },
     rowLabel: {
         flex: 1,
-        fontSize: FontSize.md,
-        fontWeight: FontWeight.medium,
+        fontSize: Typography.bodyMedium.fontSize,
+        fontWeight: '500',
     },
     helperText: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
         paddingHorizontal: Spacing.md,
         paddingTop: Spacing.sm,
         paddingBottom: Spacing.xs,
@@ -311,22 +338,43 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     aboutValue: {
-        fontSize: FontSize.sm,
+        fontSize: Typography.bodySmall.fontSize,
         marginTop: 2,
     },
     bottomSpacer: {
         height: 40,
     },
+    privacyContainer: {
+        paddingVertical: 0,
+    },
+    privacyItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: Spacing.md,
+        gap: Spacing.md,
+    },
+    privacyTextContent: {
+        flex: 1,
+    },
+    privacyItemTitle: {
+        fontSize: Typography.bodyMedium.fontSize,
+        fontWeight: '700',
+        marginBottom: 2,
+    },
+    privacyItemDesc: {
+        fontSize: Typography.labelSmall.fontSize,
+        lineHeight: 18,
+    },
     vaultActionContainer: {
         padding: Spacing.md,
     },
     vaultActionTitle: {
-        fontSize: FontSize.md,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyMedium.fontSize,
+        fontWeight: '700',
         marginBottom: 4,
     },
     vaultActionDesc: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
         marginBottom: Spacing.md,
     },
     vaultInput: {
@@ -334,7 +382,7 @@ const styles = StyleSheet.create({
         borderRadius: Radius.md,
         borderWidth: 1,
         paddingHorizontal: Spacing.md,
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         marginBottom: Spacing.md,
     },
     vaultBtnRow: {
@@ -349,7 +397,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     vaultBtnText: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '700',
     }
 });

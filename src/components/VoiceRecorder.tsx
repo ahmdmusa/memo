@@ -12,7 +12,7 @@ import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { Spacing, Radius, FontSize, FontWeight } from '../theme';
+import { Spacing, Radius, Typography } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface VoiceRecorderProps {
@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
         gap: Spacing.lg
     },
     hint: {
-        fontSize: FontSize.sm,
-        fontWeight: FontWeight.medium
+        fontSize: Typography.bodySmall.fontSize,
+        fontWeight: '500'
     },
     timerRow: {
         flexDirection: 'row',
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
         borderRadius: 4
     },
     timer: {
-        fontSize: FontSize.xl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.titleLarge.fontSize,
+        fontWeight: '800',
         fontVariant: ['tabular-nums']
     },
     pulseRing: {
@@ -237,6 +237,6 @@ const styles = StyleSheet.create({
         paddingVertical: Spacing.sm
     },
     cancelText: {
-        fontSize: FontSize.sm
+        fontSize: Typography.bodySmall.fontSize
     }
 });

@@ -7,10 +7,10 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Markdown from 'react-native-markdown-display';
-import { Video, ResizeMode } from 'expo-av';
+import RenderHtml from 'react-native-render-html';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { deletePost } from '../db/database';
 import AudioPlayerCard from './AudioPlayerCard';
 import { useSettings } from '../context/SettingsContext';
@@ -40,6 +40,19 @@ const TYPE_LABEL: Record<string, string> = {
     article: 'Article',
     voice: 'Voice'
 };
+
+function PostVideo({ uri }: { uri: string }) {
+    const player = useVideoPlayer(uri, p => {
+        p.loop = true;
+    });
+    return (
+        <VideoView
+            player={player}
+            style={StyleSheet.absoluteFillObject}
+            nativeControls={false}
+        />
+    );
+}
 
 export default function PostCard({ post, onPress, onDeleted }: PostCardProps) {
     const { colors: Colors } = useSettings();
@@ -72,14 +85,23 @@ export default function PostCard({ post, onPress, onDeleted }: PostCardProps) {
         onPress(post);
     };
 
-    const markdownStyles = StyleSheet.create({
+    const isThought = post.type === 'thought';
+    const baseFontSize = isThought ? Typography.bodyLarge.fontSize : Typography.bodyMedium.fontSize;
+
+    const htmlStyles = {
         body: {
-            fontSize: post.type === 'thought' ? FontSize.lg : FontSize.md,
+            fontSize: baseFontSize,
             color: Colors.textPrimary,
-            lineHeight: post.type === 'thought' ? 26 : 22,
-            fontStyle: post.type === 'thought' ? 'italic' : 'normal',
+            lineHeight: isThought ? 26 : 22,
+            fontStyle: isThought ? 'italic' : 'normal',
+            margin: 0,
+            padding: 0
+        },
+        p: {
+            margin: 0,
+            padding: 0
         }
-    });
+    };
 
     return (
         <TouchableOpacity
@@ -100,15 +122,18 @@ export default function PostCard({ post, onPress, onDeleted }: PostCardProps) {
                 </View>
             </View>
 
-            {/* Content Text (Markdown) */}
+            {/* Content Text (HTML) */}
             {post.title && (
                 <Text style={[styles.title, { color: Colors.textPrimary }]} numberOfLines={2}>{post.title}</Text>
             )}
             {post.body ? (
                 <View style={styles.markdownWrapper}>
-                    <Markdown style={markdownStyles}>
-                        {post.body}
-                    </Markdown>
+                    <RenderHtml
+                        contentWidth={SCREEN_W - Spacing.md * 2}
+                        source={{ html: post.body }}
+                        baseStyle={htmlStyles.body as any}
+                        tagsStyles={htmlStyles as any}
+                    />
                 </View>
             ) : null}
 
@@ -130,13 +155,7 @@ export default function PostCard({ post, onPress, onDeleted }: PostCardProps) {
             {/* Video Player */}
             {post.type === 'video' && post.media_uri && (
                 <View style={[styles.media, { backgroundColor: Colors.bgHighlight }]}>
-                    <Video
-                        source={{ uri: post.media_uri }}
-                        style={StyleSheet.absoluteFillObject}
-                        useNativeControls
-                        resizeMode={ResizeMode.COVER}
-                        isLooping
-                    />
+                    <PostVideo uri={post.media_uri} />
                 </View>
             )}
 
@@ -187,8 +206,8 @@ const styles = StyleSheet.create({
         borderRadius: Radius.full,
     },
     typeBadgeText: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '600',
         letterSpacing: 0.3,
     },
     headerRight: {
@@ -197,10 +216,10 @@ const styles = StyleSheet.create({
         gap: Spacing.sm,
     },
     mood: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
     },
     date: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
     },
     media: {
         width: SCREEN_W - Spacing.md * 2,
@@ -214,8 +233,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     title: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyLarge.fontSize,
+        fontWeight: '700',
         paddingHorizontal: Spacing.md,
         paddingTop: Spacing.sm,
         lineHeight: 24,
@@ -234,7 +253,7 @@ const styles = StyleSheet.create({
         marginTop: Spacing.xs,
     },
     footerDate: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
     },
     accentLine: {
         height: 3,

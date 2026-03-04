@@ -19,6 +19,7 @@ async function initDb(database: SQLite.SQLiteDatabase) {
     CREATE TABLE IF NOT EXISTS posts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       type TEXT NOT NULL,
+      cognitive_mode TEXT DEFAULT 'free',
       title TEXT,
       body TEXT,
       image_uri TEXT,
@@ -27,8 +28,22 @@ async function initDb(database: SQLite.SQLiteDatabase) {
       mood TEXT,
       mood_tag TEXT,
       location_metadata TEXT,
+      is_actionable BOOLEAN DEFAULT 0,
+      action_status TEXT DEFAULT 'pending',
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS tags (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE
+    );
+
+    CREATE TABLE IF NOT EXISTS post_tags (
+        post_id INTEGER,
+        tag_id INTEGER,
+        FOREIGN KEY(post_id) REFERENCES posts(id),
+        FOREIGN KEY(tag_id) REFERENCES tags(id)
     );
 
     CREATE TABLE IF NOT EXISTS profile (
@@ -59,12 +74,22 @@ async function initDb(database: SQLite.SQLiteDatabase) {
     if (!cols.includes('location_metadata')) {
         await database.execAsync(`ALTER TABLE posts ADD COLUMN location_metadata TEXT`);
     }
+    if (!cols.includes('cognitive_mode')) {
+        await database.execAsync(`ALTER TABLE posts ADD COLUMN cognitive_mode TEXT DEFAULT 'free'`);
+    }
+    if (!cols.includes('is_actionable')) {
+        await database.execAsync(`ALTER TABLE posts ADD COLUMN is_actionable BOOLEAN DEFAULT 0`);
+    }
+    if (!cols.includes('action_status')) {
+        await database.execAsync(`ALTER TABLE posts ADD COLUMN action_status TEXT DEFAULT 'pending'`);
+    }
 }
 
 // ── Posts ──────────────────────────────────────────────
 
 export async function createPost(params: {
     type: PostType;
+    cognitive_mode?: import('../types').CognitiveMode;
     title?: string;
     body?: string;
     image_uri?: string;
@@ -73,13 +98,17 @@ export async function createPost(params: {
     mood?: Mood;
     mood_tag?: string;
     location_metadata?: string;
+    is_actionable?: boolean;
+    action_status?: 'pending' | 'resolved';
 }): Promise<Post> {
     const database = await getDb();
     const now = new Date().toISOString();
+    const isActionableInt = params.is_actionable ? 1 : 0;
     const result = await database.runAsync(
-        `INSERT INTO posts (type, title, body, image_uri, media_uri, duration, mood, mood_tag, location_metadata, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO posts (type, cognitive_mode, title, body, image_uri, media_uri, duration, mood, mood_tag, location_metadata, is_actionable, action_status, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         params.type,
+        params.cognitive_mode ?? 'free',
         params.title ?? null,
         params.body ?? null,
         params.image_uri ?? null,
@@ -88,12 +117,15 @@ export async function createPost(params: {
         params.mood ?? null,
         params.mood_tag ?? null,
         params.location_metadata ?? null,
+        isActionableInt,
+        params.action_status ?? 'pending',
         now,
         now,
     );
     return {
         id: result.lastInsertRowId,
         type: params.type,
+        cognitive_mode: params.cognitive_mode ?? 'free',
         title: params.title,
         body: params.body,
         image_uri: params.image_uri,
@@ -102,6 +134,8 @@ export async function createPost(params: {
         mood: params.mood,
         mood_tag: params.mood_tag,
         location_metadata: params.location_metadata,
+        is_actionable: !!isActionableInt,
+        action_status: params.action_status ?? 'pending',
         created_at: now,
         updated_at: now,
     };
@@ -137,19 +171,23 @@ export async function searchPosts(query: string): Promise<Post[]> {
 
 export async function updatePost(
     id: number,
-    params: Partial<{ title: string; body: string; image_uri: string; mood: Mood }>,
+    params: Partial<{ title: string; body: string; image_uri: string; mood: Mood; cognitive_mode: import('../types').CognitiveMode; is_actionable: boolean; action_status: 'pending' | 'resolved' }>,
 ): Promise<void> {
     const database = await getDb();
     const now = new Date().toISOString();
     const sets: string[] = [];
-    const values: (string | null)[] = [];
+    const values: (string | number | null)[] = [];
 
     if (params.title !== undefined) { sets.push('title = ?'); values.push(params.title); }
     if (params.body !== undefined) { sets.push('body = ?'); values.push(params.body); }
     if (params.image_uri !== undefined) { sets.push('image_uri = ?'); values.push(params.image_uri); }
     if (params.mood !== undefined) { sets.push('mood = ?'); values.push(params.mood); }
+    if (params.cognitive_mode !== undefined) { sets.push('cognitive_mode = ?'); values.push(params.cognitive_mode); }
+    if (params.is_actionable !== undefined) { sets.push('is_actionable = ?'); values.push(params.is_actionable ? 1 : 0); }
+    if (params.action_status !== undefined) { sets.push('action_status = ?'); values.push(params.action_status); }
+
     sets.push('updated_at = ?'); values.push(now);
-    values.push(String(id));
+    values.push(id);
 
     await database.runAsync(
         `UPDATE posts SET ${sets.join(', ')} WHERE id = ?`,

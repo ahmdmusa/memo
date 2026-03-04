@@ -13,7 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { RootStackParamList } from '../types/index';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { getAllPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import { useSettings } from '../context/SettingsContext';
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
         marginBottom: Spacing.md
     },
     headerTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800',
         marginBottom: 4
     },
     headerSub: {
-        fontSize: FontSize.sm
+        fontSize: Typography.bodySmall.fontSize
     },
 
     sectionHeader: {
@@ -157,15 +157,15 @@ const styles = StyleSheet.create({
         paddingTop: Spacing.md
     },
     sectionTitle: {
-        fontSize: FontSize.lg,
-        fontWeight: FontWeight.bold,
+        fontSize: Typography.bodyLarge.fontSize,
+        fontWeight: '700',
         marginBottom: 2
     },
     sectionSub: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
         textTransform: 'uppercase',
         letterSpacing: 0.7,
-        fontWeight: FontWeight.medium
+        fontWeight: '500'
     },
 
     list: { paddingBottom: 120 },
@@ -178,21 +178,21 @@ const styles = StyleSheet.create({
     },
     emptyEmoji: { fontSize: 56 },
     emptyTitle: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800',
         textAlign: 'center'
     },
     emptyBody: {
-        fontSize: FontSize.md,
+        fontSize: Typography.bodyMedium.fontSize,
         textAlign: 'center',
         lineHeight: 22
     },
     emptyStats: { alignItems: 'center', marginTop: Spacing.lg },
     emptyStatNum: {
-        fontSize: FontSize.xxxl,
-        fontWeight: FontWeight.heavy
+        fontSize: Typography.headlineLarge.fontSize,
+        fontWeight: '800'
     },
     emptyStatLabel: {
-        fontSize: FontSize.sm
+        fontSize: Typography.bodySmall.fontSize
     }
 });

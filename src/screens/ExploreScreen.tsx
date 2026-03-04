@@ -12,7 +12,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { RootStackParamList, PostType } from '../types/index';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { getAllPosts, getPostsByType, searchPosts } from '../db/database';
 import PostCard from '../components/PostCard';
 import { useSettings } from '../context/SettingsContext';
@@ -145,8 +145,8 @@ const styles = StyleSheet.create({
         paddingBottom: Spacing.md
     },
     title: {
-        fontSize: FontSize.xxl,
-        fontWeight: FontWeight.heavy,
+        fontSize: Typography.headlineSmall.fontSize,
+        fontWeight: '800',
         marginBottom: Spacing.md
     },
     searchBar: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
-        fontSize: FontSize.md
+        fontSize: Typography.bodyMedium.fontSize
     },
     filterRow: {
         flexDirection: 'row',
@@ -178,14 +178,14 @@ const styles = StyleSheet.create({
         borderWidth: 1
     },
     filterText: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.medium
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '500'
     },
     resultsCount: {
-        fontSize: FontSize.xs,
+        fontSize: Typography.labelSmall.fontSize,
         paddingHorizontal: Spacing.md,
         marginBottom: Spacing.sm,
-        fontWeight: FontWeight.medium,
+        fontWeight: '500',
         textTransform: 'uppercase',
         letterSpacing: 0.6
     },
@@ -196,6 +196,6 @@ const styles = StyleSheet.create({
         gap: Spacing.md
     },
     emptyText: {
-        fontSize: FontSize.md
+        fontSize: Typography.bodyMedium.fontSize
     }
 });

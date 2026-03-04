@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { Ionicons } from '@expo/vector-icons';
 import dayjs from 'dayjs';
 import { Post } from '../types';
-import { Spacing, Radius, FontSize, FontWeight, getPostColor, getPostDim } from '../theme';
+import { Spacing, Radius, Typography, getPostColor, getPostDim } from '../theme';
 import { useSettings } from '../context/SettingsContext';
 
 interface StoryBarProps {
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     label: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.semibold,
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '600',
         letterSpacing: 0.8,
         textTransform: 'uppercase',
         marginLeft: Spacing.md,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     storyTime: {
-        fontSize: FontSize.xs,
-        fontWeight: FontWeight.medium
+        fontSize: Typography.labelSmall.fontSize,
+        fontWeight: '500'
     }
 });
