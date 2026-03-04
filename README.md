@@ -1,14 +1,16 @@
 <div align="center">
+  
+<img src="https://github.com/user-attachments/assets/7f4bb81c-74f0-42b8-a04e-2b63fa209317"  width="120" height="120" style="border-radius: 22px;" />
 
-<img src="assets/icon.png" width="110" height="110" style="border-radius: 22px;" />
 
-# memo
+# MEMO - SocialMedia-like Journaling App
+
+
+
 
 **Your private garden. Always offline. Always yours.**
 
 [![Latest Release](https://img.shields.io/github/v/release/ahmdmusa/memo?label=Download&color=black&logo=android)](https://github.com/ahmdmusa/memo/releases/latest)
-&nbsp;
-[![Build APK](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml/badge.svg)](https://github.com/ahmdmusa/memo/actions/workflows/build-apk.yml)
 &nbsp;
 ![Offline](https://img.shields.io/badge/100%25%20Offline-success)
 &nbsp;
